@@ -60,7 +60,7 @@ jobs:
 
     - name: Configure vercel.json
       run: |
-        cat > build/vercel.json <<EOF
+        cat > .next/vercel.json <<EOF
         {
           "rewrites": [
             {
@@ -82,7 +82,7 @@ jobs:
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }} # Required
         github-comment: false
         vercel-args: ${{ steps.metadata.outputs.VERCEL_ARGS }}
-        working-directory: build
+        working-directory: .next
 
     # Update GH deployment status
     - name: Update Deployment Status
