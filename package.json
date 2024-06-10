@@ -1,0 +1,31 @@
+{
+  "name": "cf-identity-wallet-documentation",
+  "description": "Cardano Foundation Identity Wallet Documentation",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cardano-foundation/cf-identity-wallet-documentation.git"
+  },
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "prettier": "npx prettier . --write",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "next": "^14.2.3",
+    "nextra": "^2.13.4",
+    "nextra-theme-docs": "^2.13.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.5",
+    "prettier": "3.3.1",
+    "typescript": "^5.4.5"
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
+  }
+}
