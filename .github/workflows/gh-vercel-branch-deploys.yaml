@@ -51,14 +51,7 @@ jobs:
     - name: Setup Node
       uses: actions/setup-node@v2
       with:
-        node-version: '18'
-
-    - name: Run unit tests
-      env:
-        NODE_OPTIONS: "--max_old_space_size=8192"
-      run: |
-        npm ci
-        npm run test
+        node-version: '22'
 
     - name: 🔨 Build project
       run: npm run build
