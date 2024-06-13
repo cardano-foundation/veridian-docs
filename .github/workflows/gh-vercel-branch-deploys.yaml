@@ -57,6 +57,8 @@ jobs:
       run: |
         npm ci
         npm run build
+        mkdir -p .next/server/pages/_next
+        mv .next/static ./.next/server/pages/_next/
 
     - name: Configure vercel.json
       run: |
@@ -82,7 +84,7 @@ jobs:
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }} # Required
         github-comment: false
         vercel-args: ${{ steps.metadata.outputs.VERCEL_ARGS }}
-        working-directory: .next
+        working-directory: .next/server/pages
 
     # Update GH deployment status
     - name: Update Deployment Status
