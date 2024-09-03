@@ -47,10 +47,11 @@ jobs:
           npm run build
           mkdir -p .next/server/pages/_next
           mv .next/static ./.next/server/pages/_next/
+          cp -a next.config.js ./.next/server/pages/
 
     - name: Configure vercel.json
       run: |
-        cat > .next/vercel.json <<EOF
+        cat > .next/server/pages/vercel.json <<EOF
         {
           "rewrites": [
             {
