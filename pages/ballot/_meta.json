@@ -1,0 +1,8 @@
+{
+  "install": "Downloading and installing the Identity Wallet",
+  "onboarding": "Identity Wallet onboarding",
+  "create-identifier": "Create your first identifier",
+  "cardano-connect": "Connecting to Cardano Ballot",
+  "wallet-verification": "Verifying your Wallet (Discord & SMS)",
+  "cast-vote": "Creating and signing a ballot"
+}

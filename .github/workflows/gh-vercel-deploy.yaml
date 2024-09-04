@@ -1,0 +1,107 @@
+name: vercel-deploy
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    types: [ opened, synchronize ]
+
+env:
+  PRODUCTION_BRANCH: main
+
+jobs:
+  vercel-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive  # Fetch private content
+        fetch-depth: 1         # Fetch all history for .GitInfo and .Lastmod
+        lfs: true
+
+    - name: ⛮ cf-gha-baseline
+      uses: cardano-foundation/cf-gha-workflows/./actions/cf-gha-baseline@main
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: ⛮ Set vercel deploy metadata
+      id: metadata
+      run: |
+        if [ "${TRIGGERING_REF}" == "push" ]
+        then
+          if [ "${BRANCH_NAME}" == "${PRODUCTION_BRANCH}" ]
+          then
+            echo "VERCEL_ARGS=--prod" | tee -a "$GITHUB_ENV" | tee -a "${GITHUB_OUTPUT}"
+          fi
+          echo "DEPLOY_NAME=BRANCH-${BRANCH_NAME}" | tee -a "$GITHUB_ENV" | tee -a "${GITHUB_OUTPUT}"
+        elif [ "${TRIGGERING_REF}" == "pr" ]
+        then
+          echo "DEPLOY_NAME=PR-${PR_NUMBER}" | tee -a "$GITHUB_ENV" | tee -a "${GITHUB_OUTPUT}"
+        fi
+
+    - name: Start Deployment
+      uses: bobheadxi/deployments@v0.6.2
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: vercel-deploy-${{ steps.metadata.outputs.DEPLOY_NAME }}
+
+    - name: Setup Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '22'
+
+    - name: 🔨 Build project
+      run: |
+          npm ci
+          npm run build
+          mkdir -p .next/server/pages/_next
+          mv .next/static ./.next/server/pages/_next/
+          cp -a next.config.js ./.next/server/pages/
+
+    - name: Configure vercel.json
+      run: |
+        cat > .next/server/pages/vercel.json <<EOF
+        {
+          "rewrites": [
+            {
+              "source": "/((?!^/$).*)",
+              "destination": "/"
+            }
+          ]
+        }
+        EOF
+
+    # Push our generated site to Vercel
+    - name: Deploy to Vercel
+      uses: amondnet/vercel-action@v20
+      id: vercel-action
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+        #github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}  #Required
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }} # Required
+        github-comment: false
+        vercel-args: ${{ steps.metadata.outputs.VERCEL_ARGS }}
+        working-directory: .next/server/pages
+
+    - name: Comment PR
+      uses: thollander/actions-comment-pull-request@v1
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        message: 'Vercel PR (merge commit) deploy URL: ${{ steps.vercel-action.outputs.preview-url }}'
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Update Deployment Status
+      uses: bobheadxi/deployments@v0.6.2
+      if: always()
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ job.status }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+        env_url: ${{ steps.vercel-action.outputs.preview-url }}

@@ -1,8 +1,0 @@
-{
-  "install-app": "Downloading and installing the Identity Wallet",
-  "onboarding": "Onboarding",
-  "cardano-ballot-connection": "Connecting to Cardano Ballot",
-  "cardano-ballot-wallet-verification": "Verifying Wallet (Discord & SMS)",
-  "cardano-ballot-login": "Login",
-  "cardano-ballot-cast-vote": "Cast a vote"
-}
