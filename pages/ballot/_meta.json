@@ -4,5 +4,6 @@
   "create-identifier": "Create your first identifier",
   "cardano-connect": "Connecting to Cardano Ballot",
   "wallet-verification": "Verifying your Wallet (Discord & SMS)",
-  "cast-vote": "Creating and signing a ballot"
+  "cast-vote": "Creating and signing a ballot",
+  "login": "Login and Vote Receipts"
 }

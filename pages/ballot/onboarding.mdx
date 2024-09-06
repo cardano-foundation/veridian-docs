@@ -1,6 +1,6 @@
 import { Callout } from "nextra/components";
 
-# Identity Wallet onboarding
+# Onboarding
 
 Once the app has been installed on your device, it is time to complete the onboarding process of the Identity Wallet.
 
@@ -11,7 +11,9 @@ Click the "Get Started" button to begin setting up the Identity Wallet.
   tutorial](../more/recovery.mdx).
 </Callout>
 
-The Identity Wallet uses a passcode to secure the wallet, its contents, and to confirm identity during certain actions. Enter and re-enter the 6-digit passcode to confirm its accuracy.
+#### Passcode Creation & Biometrics
+
+The Identity Wallet uses a passcode to secure the wallet and to confirm certain actions. Enter and re-enter the 6-digit passcode to confirm its accuracy.
 
 <Callout type="info">
   You can change the passcode at any time in the menu settings. More information
@@ -23,43 +25,50 @@ Before you proceed to the next step, the Identity Wallet will request permission
 - On Android, if available and enabled on your phone, the system will request a fingerprint.
 - On iOS, follow the on-screen instructions to set up Face ID or Touch ID depending on the device.
 
+#### Operations Password
+
 After confirming your identity, continue to the next step in the onboarding process.
 
-You can create an optional operations password as a more secure complement to the passcode. Once you enable this password, you will need to use it instead of the passcode for certain operations.
+You can create an optional operations password as a more secure alternative to the passcode. Once you enable this password, you will need to use it instead of the passcode for certain operations. The passcode or biometrics will still be used to unlock the app.
 
 Enter the password twice to confirm accuracy. Optionally, you can create a hint to display if you forget the password. Click the "Create Password" button at the bottom of the screen to continue.
 
-If you prefer not to create a password, click the "Skip" button at the bottom of the screen and confirm your decision by clicking “Yes, skip” on the popup that appears. You can set and manage this operations password later in the menu settings. For more information, refer to the [Manage Operations Password](../more/manage-operations-password) page.
-
-Now it’s time to generate the recovery phrase. This phrase will help you recover your identity if you ever lose your phone or switch to a new wallet.
+If you prefer not to create a password, click the "Skip" button at the bottom of the screen and confirm your decision by clicking “Yes, skip” on the popup that appears.
 
 <Callout type="info">
-  You can find more information on the recovery process
-  [here](../more/recovery).
+  You can set and manage this operations password later in the menu settings.
+  For more information, refer to the [Manage Operations
+  Password](../more/manage-operations-password) page.
 </Callout>
 
-Click on the “View Seed Phrase” button to reveal your recovery phrase.
+#### Recover Phrase
+
+Now it’s time to generate the recovery phrase. This phrase will help you recover your identity if you ever lose your phone or switch to another device.
+
+Click on the “View Recovery Phrase” button to reveal your recovery phrase.
 
 <Callout type="warning">
   It’s important to keep these words safe and sound! Store them in a secure
-  location, like a password manager, and remember to never share them with
-  anyone.
+  location and remember to never share them with anyone.
 </Callout>
 
 Once you have copied the recovery phrase, accept the Terms of Use and Privacy Policy by clicking on the checkbox, and then click on the “Generate” button located at the bottom of the screen.
 
-Click on the “Yes, copied” button to confirm that you have copied the 18-word phrase correctly and continue.
-
-To verify that you have copied the recovery phrase correctly, it’s necessary to enter it in the app to complete the verification process. From the available list of words, select each word in the correct order to match your recovery phrase.
+To verify that you have copied the recovery phrase correctly, it’s necessary to enter it in the app to complete the verification process.
 
 Once you have entered all the words, click on the “Verify” button to confirm that the entered words match your recovery phrase.
 
-The Identity Wallet needs to connect to services that run the KERI infrastructure. By default, it selects the Cardano Foundation services, but you can modify this by entering alternative URLs in the appropriate field. Click the "Validate" button to confirm the information and continue.
+#### SSI Agent Details
 
-<Callout type="warning">
-  During the Alpha Program for the Identity Wallet, the infrastructure is hosted
-  on different servers than the default ones. You can find the specific Boot and
-  Connect URLs in the email with instructions on the Alpha Program.
+The Identity Wallet leverages a cloud agent that runs KERI protocols and interfaces with other agents on the internet. For the Alpha Program, we have provided access to a cloud agent for participants. You can find the specific Boot and Connect URLs in the email that was distributed. Alternatively, you are free to run your own infrastructure.
+
+<Callout type="info">
+  The cloud agent simply helps interact with other wallets and services, and
+  offload computationally expensive tasks to the cloud. Your identity is
+  securely controlled from the Identity Wallet, and the keys never leave the
+  device.
 </Callout>
 
-The final step in the onboarding process is to enter the name you will use for identification in the app. This name may be included in some credentials. After entering your name, click the "Confirm" button.
+#### Display Name
+
+The final step in the onboarding process is to enter your display name. When connecting to other wallets and services, this name will be shared.
