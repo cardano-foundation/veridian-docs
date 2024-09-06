@@ -1,7 +1,7 @@
 import type { DocsThemeConfig } from "nextra-theme-docs";
 
 const config: DocsThemeConfig = {
-  logo: <span>Cardano Foundation Identity Wallet Documentation</span>,
+  logo: <span>Identity Wallet Documentation</span>,
   project: {
     link: "https://github.com/cardano-foundation/cf-identity-wallet",
   },
