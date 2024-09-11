@@ -1,0 +1,34 @@
+
+import { Callout } from "nextra/components";
+
+# Connections
+
+Identifiers alone aren't very useful!
+Connections allow us to talk to other wallets and services using the same identity standards.
+
+Any identifier you create in the wallet can be shared with others by way of QR code, which is effectively an endpoint on your cloud agent.
+For technical folk, this is known as an Out of Band Introduction and is a way to bootstrap a secure connection with an identifier.
+
+## How to connect
+
+You can connect to another wallet or service by scanning their connection QR code.
+If the connection cannot be established right away, it will be pending and eventually complete in the background.
+If not, you can always delete the pending connection.
+
+Likewise, you must share your QR code with the other party so they can connect with you.
+We're working on improving the user experience here by having a more interactive connection flow.
+
+<Callout type="info">
+  We mentioned in the previous section that you may also create a number of ephemeral identifiers to protect your privacy more.
+  This is currently not yet supported, so you will always be sharing a direct connection to another party.
+
+  Our hope is to support the [Trust Spanning Protocol](https://trustoverip.github.io/tswg-tsp-specification/) for this purpose.
+</Callout>
+
+## History and notes
+
+Within the details of a connection you will find a history of interactions.
+This can include activities such as being issued a credential from that connection.
+
+You can also add some notes to the connection.
+These are completely personal and are never shared with the other party.
