@@ -1,23 +1,99 @@
+import { Callout } from "nextra/components";
+import Image from "next/image";
+
 # Cardano Connect with Cardano Ballot
 
 With the first identifier ready, the next step is to connect to the Cardano Ballot website to use the identifier for casting votes.
 
 #### Cardano Ballot
 
-Access Cardano Ballot 2024 from this [link](https://voting.summit.cardano.org/). First, press the "Connect" button located in the top right corner of the window.
+Access Cardano Ballot 2024 from this [link](https://voting.summit.cardano.org/).
+First, press the "Connect" button located in the top right corner of the window.
 
-A new window will appear, prompting for the wallet to be connected. Select the "Connect Identity Wallet" option. A QR code will be displayed on the screen, which needs to be scanned using the Identity Wallet.
+<Image src="/img/ballot/cardano-ballot-landing.png" width={1000} height={300} />
+
+A new window will appear prompting for the wallet to be connected. Select the "Connect Identity Wallet" option.
+A QR code will be displayed on the screen, which will be used in the next step to create a new connection.
+
+<div className="galery-container">
+  <Image
+    src="/img/ballot/cardano-connect/cardano-connect-1.png"
+    width={350}
+    height={300}
+  />
+  <Image
+    src="/img/ballot/cardano-connect/cardano-connect-2.png"
+    width={350}
+    height={300}
+  />
+</div>
 
 #### Create a connection
 
 To create a new connection with Cardano Connect using the Identity Wallet, navigate to the menu tab of the app by clicking the button in the bottom right corner of the screen, then select the “Cardano connect” tile.
 
-Clicking on “Connect with Cardano” or the plus icon in the top right corner will open the phone’s camera to scan the QR code from the Cardano Ballot website. You can accept the connection once prompted.
+<Image src="/img/common/menu-tab.png" width={300} height={300} />
 
-Each Cardano Connect connection requires an identifier to sign and verify information, such as votes cast in Cardano Ballot. For this process, the identifier created in the previous chapter of this tutorial will be used. Select the identifier and click the "Confirm" button.
+Clicking on “Connect with Cardano” or the plus icon in the top right corner will open the phone’s camera to scan the QR code from the Cardano Ballot website.
+You can accept the connection once prompted.
 
-The Cardano Ballot webpage will update to indicate that the wallet is attempting to connect. Click "Accept" to start the connection.
+<Callout type="warning">
+  In some cases, depending on your network the connection may take up to a
+  couple of minutes to be established.
+</Callout>
 
-Congratulations! Cardano Ballot and the Identity Wallet are now connected. The Cardano connect button will now display your connection status.
+<div className="galery-container">
+  <Image
+    src="/img/ballot/cardano-connect/cardano-connect-3.png"
+    width={300}
+    height={300}
+  />
+  <Image
+    src="/img/ballot/cardano-connect/cardano-connect-4.png"
+    width={300}
+    height={300}
+  />
+</div>
+
+Each Cardano Connect connection requires an identifier to sign and verify information, such as votes cast in Cardano Ballot.
+For this process, the identifier created in the previous chapter of this tutorial will be used.
+Select the identifier and click the "Confirm" button.
+
+<Image
+  src="/img/ballot/cardano-connect/cardano-connect-5.png"
+  width={300}
+  height={300}
+/>
+
+The Cardano Ballot webpage will update to indicate that the wallet is attempting to connect.
+Click "Accept" to start the connection.
+
+<Image
+  src="/img/ballot/cardano-connect/cardano-connect-6.png"
+  width={400}
+  height={300}
+/>
+
+Congratulations! Cardano Ballot and the Identity Wallet are now connected.
+The Cardano connect button will now display your connection status.
+
+<Image
+  src="/img/ballot/cardano-connect/cardano-connect-7.png"
+  width={700}
+  height={300}
+/>
+
+<Image
+  src="/img/ballot/cardano-connect/cardano-connect-8.png"
+  width={350}
+  height={300}
+/>
 
 You can always disconnect and reconnect to Cardano Ballot as needed but if the data from the browser is lost the creation of a new connection will be required.
+
+<Callout type="warning">
+  You should always reconnect to Cardano Ballot using the identifier that was
+  used during the wallet verification process. While it is possible to connect
+  using a different identifier, this will require the wallet to be verified
+  again using a different method than previously used.
+</Callout>

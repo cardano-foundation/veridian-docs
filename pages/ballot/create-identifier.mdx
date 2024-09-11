@@ -1,24 +1,45 @@
 import { Callout } from "nextra/components";
+import Image from "next/image";
 
 # Create your first identifier
 
-After completing the onboarding process, your next step is to create your first identifier. You will use this identifier to sign and verify votes in Cardano Ballot.
+After completing the onboarding process, your next step is to create your first identifier.
+You will use this identifier to sign and verify votes in Cardano Ballot.
 
 To create a new identifier, press the "Add an Identifier" button or the plus button in the top right corner of the app.
 
-Choose a name that helps you remember the identifier’s purpose. For voting on Cardano Ballot, select "Individual" as the identifier type. Voting using group identifiers is not yet supported for Cardano Ballot.
+<Image
+  src="/img/ballot/create-identifier/create-identifier-1.png"
+  width={300}
+  height={300}
+/>
+
+Choose a name that helps you remember the identifier’s purpose.
+For voting on Cardano Ballot, select "Individual" as the identifier type.
+Voting using group identifiers is not yet supported for Cardano Ballot.
 
 <Callout type="info">
   For more information on identifiers click on the information icon next to the
-  AID type text.
+  Identifier text.
 </Callout>
 
-After generating the identifier, it will appear in the deck of identifiers in the Identifiers tab of the app. Click on the card to access all the details of the identifier.
+<Image
+  src="/img/ballot/create-identifier/create-identifier-1.png"
+  width={300}
+  height={300}
+/>
+
+After generating the identifier, it will appear in the deck of identifiers in the Identifiers tab of the app.
+Click on the card to access all the details of the identifier.
+
+<div className="galery-container">
+  <Image src="/img/common/identifier-list.png" width={300} height={300} />
+  <Image src="/img/common/identifier-details.png" width={300} height={300} />
+</div>
 
 <Callout type="warning">
-  Due to on-going GDPR considerations users participating in the Alpha program
-  will not be able to leverage the on-chain verification service that is
-  available to stake address-based voters. In order to provide on-chain
-  verification, Alpha user’s Key Event Logs will need to be written on-chain and
-  the format and process for Keri on Cardano are still under development.
-</Callout>
+  **Disclaimer for Alpha Program Votes:**
+
+Users participating in the Alpha program will not be able to leverage the full on-chain verification service. For crypto wallets, the service verifies the digital signature and proof on-chain. For Alpha participants, the verification service will only confirm the proof on-chain is accurate and does not re-verify the digital signature beyond the initial check that occurs when the ballot is cast. This is related to key rotation and we aim to support this verification in the future by anchoring votes in the Key Event Logs of the KERI identifiers.
+
+  </Callout>
