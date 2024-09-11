@@ -1,0 +1,59 @@
+
+import { Callout } from "nextra/components";
+
+# Identifiers
+
+Identifiers form the base of your identity and are similar to Cardano addresses.
+They are controlled by asymmetric key pairs which may or may not be updatable.
+
+A user might have a number of public identifiers which represent different personas of that person's digital identity.
+Public identifiers will build up reputation over time and may hold a number of credentials.
+It may even be involved in issuing credentials!
+As such, it's quite important to be able to rotate keys and recover from any key compromise or exposure.
+
+In addition, you may use a number of ephemeral identifiers to help protect your privacy from bystanders.
+
+## Identifier types
+
+The first tab of the wallet holds and tracks your public identifiers.
+Here you can create, rotate and delete identifiers.
+
+When creating an identifier you may select Individual or Group.
+Individual identifiers represent you as a person whereas group is designed to represent an entity.
+
+For now, individual identifiers are single-signature identifiers which means there is one key pair to sign statements, and one key pair to rotate keys.
+We hope to expand this in the future to support multi-device recovery and social recovery.
+
+Group identifiers are of course already multi-signature.
+Each member of the group controls one of the signing keys and one of the rotation keys.
+A threshold can be set to decide how many members of a group are required to sign or rotate.
+
+<Callout type="info">
+  Multi-signature identifiers in theory can be customised much further.
+  Each member's signature can be weighted, and the threshold and weights can be different for signing and rotation.
+  In fact, you could even have different members who can sign and who can rotate.
+
+  For now, we're starting out simple to not overcomplicate the user experience!
+</Callout>
+
+## Rotating keys
+
+In general it's a good practice to rotate keys over time.
+This more data you sign with a key, the more exposed it gets.
+
+In the case of a group identifier, rotating also allows you to change which members are in the group - however, this is a work in progress and not supported yet!
+In the future, rotation will also enable individual identifiers to be recovered with multi-device and social recovery.
+
+The ultimate goal is to keep your idnetifiers for life.
+That way you can always prove who you are, and your reputation can be built up and end up carrying a lot of weight.
+This is why we are so keen on being ready for any potential key compromise or device loss.
+
+## Delegated identifiers
+
+Single or multi-signature identifiers may also be delegated.
+Delegation in KERI is known as co-operative delegation and is used in enterprise to help in top-down hierarchical recovery.
+In a nutshell, a delegator must give a signed approval of the creation of a delegatee identifier and any key rotations.
+The delegator may also be changed.
+
+There are some advanced features of recovery that are enabled by delegated identifiers, but we think it would be a little too much for this documentation.
+Delegated identifiers aren't supported in the wallet yet, but is indeed planned!
