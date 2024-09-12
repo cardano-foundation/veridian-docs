@@ -1,33 +1,116 @@
+import Image from "next/image";
+
 # Verify your Wallet on Cardano Ballot
 
 After successfully connecting Cardano Ballot and the Identity Wallet, the wallet must be verified to prevent fraudulent votes.
 
-In the top left corner of the Cardano Ballot window, click on the wallet button and select the "Verify Wallet" option. A pop-up window will appear to initiate the verification process.
+In the top left corner of the Cardano Ballot window, click on the wallet button and select the "Verify Wallet" option.
+A pop-up window will appear to initiate the verification process.
 
-Cardano Ballot offers two methods for wallet verification: Discord or SMS. Both methods are equally effective, so select the one most convenient.
+<div className="galery-container">
+  <Image
+    src="/img/ballot/verification/wallet-verification-1.png"
+    width={350}
+    height={300}
+  />
+  <Image
+    src="/img/ballot/verification/wallet-verification-2.png"
+    width={400}
+    height={300}
+  />
+</div>
+
+Cardano Ballot offers two methods for wallet verification: SMS or Discord.
+Both methods are equally effective, so select the one most convenient.
+
+<Image
+  src="/img/ballot/verification/wallet-verification-3.png"
+  width={400}
+  height={300}
+/>
+
+## SMS
+
+For SMS verification, Cardano Ballot will need to link your wallet to a phone number.
+Enter the phone number and request a code.
+
+<Image
+  src="/img/ballot/verification/sms/wallet-verification-sms-1.png"
+  width={400}
+  height={300}
+/>
+
+Once the verification code is received, enter it in the Cardano Ballot po-pup.
+
+<Image
+  src="/img/ballot/verification/sms/wallet-verification-sms-2.png"
+  width={400}
+  height={300}
+/>
+
+The wallet will then be verified, as indicated by the new blue checkmark and will be ready for use in casting votes on Cardano Ballot.
+
+<Image
+  src="/img/ballot/verification/wallet-verification-4.png"
+  width={400}
+  height={300}
+/>
 
 ## Discord
 
 For Discord verification, Cardano Ballot will ask you to sign some random data using the Identity Wallet to verify your identity and ownership of the wallet.
 
-Click on the “Discord Server” link in step 1 of the popup. This will open the Cardano Foundation | Engineering and Development Discord server on your browser or Discord application.
+Click on the “Discord Server” link in step 1 of the popup.
+This will open our Discord server on your browser or Discord application.
+
+<Image
+  src="/img/ballot/verification/discord/wallet-verification-discord-1.png"
+  width={400}
+  height={300}
+/>
 
 In the Verification channel, react to the message using a rocket emoji to unlock the other channels in the server.
 
-After unlocking the rest of the channels in the server, click on the “Wallet Verification Channel” link in step 2 of the popup. This will open a channel with the verification bot.
+<Image
+  src="/img/ballot/verification/discord/wallet-verification-discord-2.png"
+  width={800}
+  height={300}
+/>
+
+After unlocking the rest of the channels in the server, click on the “Wallet Verification Channel” link in step 2 of the popup.
+This will open a channel with the verification bot.
 
 Click on the “Start Wallet Verification” button to obtain the message that will be signed by the Identity Wallet.
 
+<Image
+  src="/img/ballot/verification/discord/wallet-verification-discord-3.png"
+  width={800}
+  height={300}
+/>
+
 Copy the message sent by the bot and paste it into the “Secret Key” field located in the popup on the Cardano Ballot website, then click on the “Sign and Verify” button.
 
-In the Identity Wallet, a new page will appear prompting you to sign the information you pasted into the “Secret Key” field. Click on the “Sign” button to proceed.
+<Image
+  src="/img/ballot/verification/discord/wallet-verification-discord-4.png"
+  width={800}
+  height={300}
+/>
+
+<Image
+  src="/img/ballot/verification/discord/wallet-verification-discord-5.png"
+  width={400}
+  height={300}
+/>
+
+In the Identity Wallet, a pop up will appear prompting you to sign the information you pasted into the “Secret Key” field.
+Click on the “Sign” button to proceed.
+
+<Image src="/img/ballot/login/login-1.png" width={300} height={300} />
 
 The wallet will then be verified, as indicated by the new blue checkmark and will be ready for use in casting votes on Cardano Ballot.
 
-## SMS
-
-For SMS verification, Cardano Ballot will need a phone number for two-factor authentication. Enter the phone number and request a phone number.
-
-Once the verification code is received, enter it in the Cardano Ballot po-pup.
-
-The wallet will then be verified, as indicated by the new blue checkmark and will be ready for use in casting votes on Cardano Ballot.
+<Image
+  src="/img/ballot/verification/wallet-verification-4.png"
+  width={400}
+  height={300}
+/>

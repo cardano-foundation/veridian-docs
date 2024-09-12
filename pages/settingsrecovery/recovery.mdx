@@ -1,4 +1,5 @@
 import { Callout } from "nextra/components";
+import Image from "next/image";
 
 # Wallet recovery
 
@@ -6,17 +7,30 @@ If you created an Identity Wallet in the past and have since uninstalled the app
 
 To begin the recovery process, click on the “I already have a wallet” button located at the bottom of the screen.
 
+<Image src="/img/ballot/onboarding/onboarding-1.png" width={300} height={300} />
+
 <Callout type="info">
   The first two steps of the recovery process are the same as those in the
   onboarding process. If needed, more information on creating a passcode and a
-  password can be found in the [onboarding tutorial](/ballot/onboarding) page.
+  password can be found in the [onboarding
+  tutorial](/ballot/onboarding#passcode-creation--biometrics) page.
 </Callout>
 
-Once you have created a passcode and optionally a password, it's time to enter the old wallet recovery phrase. In each field, type the corresponding word. A list of suggestions will appear as you type; select the appropriate word, and the keyboard will focus on the next field. Repeat this process for the rest of the words, then click the "Confirm" button to continue to the next step.
+Once you have created a passcode and optionally a password, it's time to enter the old wallet recovery phrase.
+In each field, type the corresponding word.
+A list of suggestions will appear as you type; select the appropriate word, and the keyboard will focus on the next field.
+Repeat this process for the rest of the words, then click the "Confirm" button to continue to the next step.
+
+<div className="galery-container">
+  <Image src="/img/more/recovery/recovery-1.png" width={300} height={300} />
+  <Image src="/img/more/recovery/recovery-2.png" width={300} height={300} />
+</div>
 
 Lastly, you will need to include your SSI agent details, if necessary.
 
 <Callout type="info">
   More information on this process can be found in the [onboarding
-  tutorial](/ballot/onboarding) page.
+  tutorial](/ballot/onboarding#ssi-agent-details) page.
 </Callout>
+
+<Image src="/img/more/recovery/recovery-3.png" width={300} height={300} />
