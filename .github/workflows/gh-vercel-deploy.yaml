@@ -62,6 +62,7 @@ jobs:
           mkdir -p .next/server/pages/_next
           mv .next/static ./.next/server/pages/_next/
           cp -a next.config.js ./.next/server/pages/
+          cp -a public/* ./.next/server/pages/
 
     - name: Configure vercel.json
       run: |
