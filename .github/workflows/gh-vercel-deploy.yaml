@@ -56,8 +56,6 @@ jobs:
         node-version: '22'
 
     - name: 🔨 Build project
-      env:
-        NEXT_PUBLIC_BASE_PATH: /docs
       run: |
           npm ci
           npm run build
