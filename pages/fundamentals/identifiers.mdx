@@ -12,6 +12,10 @@ As such, it's quite important to be able to rotate keys and recover from any key
 
 In addition, you may use a number of ephemeral identifiers to help protect your privacy from bystanders.
 
+<Callout type="info">
+  We use the [Key Event Receipt Infrastructure](https://trustoverip.github.io/tswg-keri-specification/) (KERI) standard for managing identifiers and keys.
+</Callout>
+
 ## Identifier types
 
 The first tab of the wallet holds and tracks your public identifiers.
@@ -39,7 +43,7 @@ For now, we're starting out simple to not overcomplicate the user experience!
 ## Rotating keys
 
 In general it's a good practice to rotate keys over time.
-This more data you sign with a key, the more exposed it gets.
+The more data you sign with a key, the more exposed it gets.
 
 In the case of a group identifier, rotating also allows you to change which members are in the group - however, this is a work in progress and not supported yet!
 In the future, rotation will also enable individual identifiers to be recovered with multi-device and social recovery.
