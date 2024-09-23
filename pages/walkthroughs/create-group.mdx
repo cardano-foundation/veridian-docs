@@ -1,4 +1,5 @@
 import { Callout } from "nextra/components";
+import Image from "next/image";
 
 # Creating a group identifier
 
@@ -11,9 +12,28 @@ One member acts as the initiator of a group and creates a new identifier in the 
 At this point, a QR code will appear which can be shared with the other members of the desired group.
 This QR code is slightly different and when scanned by other wallets it will automatically bootstrap setting up the group identifier on their device.
 
+<div className="galery-container">
+  <Image
+    src="/img/more/group-identifier/group-identifier-1.png"
+    width={350}
+    height={300}
+  />
+  <Image
+    src="/img/more/group-identifier/group-identifier-2.png"
+    width={350}
+    height={300}
+  />
+</div>
+
 The other group members will also see a QR code appear on-screen which should be shared with the initiator and every _other_ group member.
 Below the QR code you may also see the current members you have connected with.
 These connections will only appear here and not in the main connections list in the wallet.
+
+<Image
+    src="/img/more/group-identifier/group-identifier-3.png"
+    width={350}
+    height={300}
+  />
 
 <Callout type="info">
   While sharing the QR codes, this identifiers will appear in a "For groups"
@@ -27,8 +47,27 @@ Once all members are interconnected, the initiator can finalise the creation of 
 At this point, the initiator can remove any undesired members and set a threshold.
 The threshold decides how many members need to provide a signature when using the identifier or rotating keys.
 
+<Image
+    src="/img/more/group-identifier/group-identifier-4.png"
+    width={350}
+    height={300}
+  />
+
 Once finalised, a notification will be sent to all other members to accept the final configuration of the group.
 The group identifier will be pending until a threshold amount of members accept.
+
+<div className="galery-container">
+  <Image
+    src="/img/more/group-identifier/group-identifier-5.png"
+    width={350}
+    height={300}
+  />
+  <Image
+    src="/img/more/group-identifier/group-identifier-6.png"
+    width={350}
+    height={300}
+  />
+</div>
 
 <Callout type="info">
   If some connections are missing, those members will be prompted to finish
