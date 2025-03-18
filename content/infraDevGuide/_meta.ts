@@ -1,10 +1,5 @@
 export default {
-  archOverview: "",
-  runWalletSDK: "",
-  joinSandbox: "",
-  deploySandbox: "",
-  contributions: "",
-  keriGuide: "",
-  integrationExamples: "",
-  communitySupport: "",
+  sandbox: "",
+  signifyKeriGuide: "Signify/KERI guide",
+  communitySupport: ""
 };
