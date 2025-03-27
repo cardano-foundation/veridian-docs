@@ -1,34 +1,20 @@
-import { Footer, Layout, Navbar } from "nextra-theme-docs";
+import { Footer, Layout } from "nextra-theme-docs";
 import { Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
+import { NavbarWithThemeLogo } from "../components/NavbarWithThemeLogo";
 import "nextra-theme-docs/style.css";
 
-export const metadata = {
-};
+export const metadata = {};
 
-const navbar = (
-  <Navbar
-    logo={<b>Veridian Documentation</b>}
-    projectLink="https://github.com/cardano-foundation/cf-identity-wallet"
-    chatLink="https://discord.gg/Wh25yBqwpz"
-  />
-);
 const footer = <Footer>Veridian</Footer>;
 
 export default async function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      dir="ltr"
-      suppressHydrationWarning
-    >
-      <Head
-      >
-        {}
-      </Head>
+    <html lang="en" dir="ltr" suppressHydrationWarning>
+      <Head>{}</Head>
       <body>
         <Layout
-          navbar={navbar}
+          navbar={<NavbarWithThemeLogo />}
           pageMap={await getPageMap()}
           docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
           footer={footer}
