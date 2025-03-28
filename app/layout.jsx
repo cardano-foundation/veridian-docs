@@ -19,6 +19,8 @@ export default async function RootLayout({ children }) {
           pageMap={await getPageMap()}
           docsRepositoryBase={DOCUMENTATION_GITHUB_REPO_URL}
           footer={footer}
+          editLink={null}
+          feedback={{ content: null }}
         >
           {children}
         </Layout>
