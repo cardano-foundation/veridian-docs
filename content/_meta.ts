@@ -19,6 +19,7 @@ export default {
       collapsed: true,
     },
   },
+  recovery: "",
   useFlows: {
     title: "Use Flows",
     theme: {
