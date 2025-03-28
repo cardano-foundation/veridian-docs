@@ -2,6 +2,7 @@ import { Footer, Layout } from "nextra-theme-docs";
 import { Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import { NavbarWithThemeLogo } from "../components/NavbarWithThemeLogo";
+import { DOCUMENTATION_GITHUB_REPO_URL } from "../utils/constants";
 import "nextra-theme-docs/style.css";
 
 export const metadata = {};
@@ -16,7 +17,7 @@ export default async function RootLayout({ children }) {
         <Layout
           navbar={<NavbarWithThemeLogo />}
           pageMap={await getPageMap()}
-          docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
+          docsRepositoryBase={DOCUMENTATION_GITHUB_REPO_URL}
           footer={footer}
         >
           {children}
