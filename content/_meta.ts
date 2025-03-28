@@ -6,7 +6,7 @@ export default {
   index: "",
   __: {
     type: "separator",
-    title: "Veridian Wallet User Guide",
+    title: "Wallet User Guide",
   },
   walletGuide: "Introduction",
   onboarding: {
