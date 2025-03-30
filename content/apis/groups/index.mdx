@@ -1,0 +1,40 @@
+import { Callout } from "nextra/components";
+
+# Groups
+
+A fundamental aspect of organizational identity is group multi-sig identifiers.
+Let's explore KERI's approach from an implementation point of view, which helps things like group coordination.
+
+<Callout type="info">
+  Multi-sig identifiers could be used to represent the same person for recovery purposes, such as multi-device.
+  For now, we assume a group of different people or machines.
+</Callout>
+
+## Group creation
+
+From a protocol perspective, a group is a single multi-sig identifier, where keys are controlled by different wallets.
+The protocol doesn't concern itself with how those keys are controlled, or how signatures are collected, but `keripy` has a certain approach.
+
+Each member of a group creates a member identifier which is single-sig.
+The member identifiers can be used to communicate amongst themselves, and the key state of each member identifier can "copied" into the multi-sig events.
+
+<Callout type="warning">
+  Ideally, each member should use watchers to watch every other group member.
+  This protects against compromise of a group member, as well as if any member suddenly becomes malicious.
+
+  As such, member identifiers should use witnesses as well despite not being a public facing identifier.
+</Callout>
+
+### Setup local member identifiers
+
+All that's required at this stage is each member creates a single-sig identifier, and [OOBIs](../../foundations/oobis) are exchanged.
+A member identifier should only be used for a single group, and not otherwise re-used.
+This ensures:
+- A clean separation in general.
+- A key compromise doesn't impact multiple identifiers or groups, only one.
+- Creating a group with the same members, and parameters such as threshold might result in the same group identifier prefix.
+See the next section below.
+
+### Inception
+
+As we know, the prefix 

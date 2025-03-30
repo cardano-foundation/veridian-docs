@@ -1,0 +1,44 @@
+import { Callout } from "nextra/components";
+
+# Async in KERI
+
+As we touched on previously, KERI was built with scalability in mind.
+Implementors of KERI strongly prefer asynchronous communications for its scalability, and is designed to handle out-of-order messaging.
+Even keripy and KERIA are both built on a powerful library for implementing hierarchical structured concurrency called [hio](https://github.com/ioflo/hio).
+
+As a result, most operations that you can perform with a Signify client are asynchronous.
+For example, when you create a managed identifier for a user, it will be in a pending state until it receives a threshold amount of witness receipts.
+
+```ts showLineNumbers
+const result = await client.identifiers().create(name, {
+  toad: 2,
+  wits: [
+    "BBilc4-L3tFUnfM_wJr4S4OJanAv_VmF_dJNN6vkf2Ha",
+    "BLskRTInXnMxWaGqcpSyMgo0nYbalW99cGZESrz3zapM",
+    "BIKKuvBwpmDVA4Ds-EpL5bt9OqPzWPja2LigFYZN2YfX",
+  ]
+});
+
+const operation = await result.op();
+const complete = (await client.operations().get(operation.name)).done;
+```
+
+In the above example, we are using the `GET /operations/{name}` endpoint to check if a long running operation is complete.
+
+<Callout type="warning">
+  A complete operation can have succeeded or failed.
+  In both cases `done` will be true, so you should check if there is an `error` in the operation response too.
+</Callout>
+
+Operations can be deleted afterwards if desired.
+
+## Dependencies
+
+A long running operation can depend on another long running operation to be considered fully complete, which is embedded in the `metadata.depends` field.
+As it currently stands, an operation can be considered done before it's dependency is done - detailed [here](https://github.com/WebOfTrust/keria/issues/200).
+
+## Event Driven Approach
+
+Continuous polling for operation completion itself isn't quite so scalable.
+As a community, we intend to implement an [event driven approach](https://github.com/WebOfTrust/keria/issues/290) using server sent events.
+SSE is a lightweight approach that is native HTTP, and avoids the need to add extra infrastructure such as message brokers.

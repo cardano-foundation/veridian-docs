@@ -1,0 +1,112 @@
+import { Callout } from "nextra/components";
+
+# Identifiers
+
+As mentioned [before](../stack), booting a new agent on KERIA will result in a pair of delegated identifiers to secure the API - one at the edge, and another in the cloud.
+Beyond that, we can use the set of identifier interfaces in Signify to create user managed identifiers and we have a lot of flexibility in their configuration.
+
+In this section, we will just talk about single-sig identifiers to begin with.
+From a protocol perspective, a single-sig identifier is represented in the same way as a multi-sig identifier, except there is only signing and rotation key at a given time, with a threshold of 1.
+
+Please check out the [KERI identifiers](../protocols/keri) section to understand identifiers are a protocol level first.
+
+## Signify identifiers
+
+Each identifier in Signify has a human readable name.
+This name can be used in other relevant APIs to reference the identifier in question, but we recommend using the identifier ID.
+Using the human friendly name as an API argument will be phased out eventually, as it causes some issues with special characters.
+
+```ts useLineNumbers
+const result = await client.identifiers().create("Alice");
+const operation = await result.op();
+const prefix = operation.serder.ked.i;
+
+// Wait for operation to complete...
+
+const identifier = await client.identifiers().get("Alice");
+const identifier = await client.identifiers().get(prefix);  // Preferred
+
+await client.identifiers().update(prefix, { name: "Bob" });
+```
+
+As touched on in the [async](../foundations/async) page, this API will return an operation object which we must wait for completion.
+A single-sig identifier without witnesses will complete immediately, though.
+Anywhere in this document that we result a `result` or `operation` from an interface, we likely need to wait for it to complete.
+
+<Callout type="info">
+  You will see several references to an identifier "prefix".
+  In general, identifier and prefix may be interchangably used but the prefix strictly refers to the self-certifying element of the identifier, such as `EMrT7qX0FIMenQoe5pJLahxz_rheks1uIviGW8ch8pfB`.
+  
+  We prefer to use prefix when referring to the string itself, and identifier when referring to it from a data layer point of view, such as fetching, updating or deleting an identifier from the database.
+  
+  An identifier may be namespaced to provide additional context on its usage, or even be a W3C DID in the form of did:webs, such as `did:webs:example.com:Ew-o5dU5WjDrxDBK4b4HrF82_rYb6MX6xsegjq4n0Y7M`.
+  Here, within this `did:webs` identifier, the prefix is `Ew-o5dU5WjDrxDBK4b4HrF82_rYb6MX6xsegjq4n0Y7M`.
+</Callout>
+
+### Witnesses
+
+Aside from non-transferable identifiers, we strongly recommend all identifiers to use witnesses with sane thresholds.
+Witnesses run the [KAWA](https://trustoverip.github.io/tswg-keri-specification/#keris-algorithm-for-witness-agreement-kawa) algorithm for consensus but the thresholds **must** be set correctly for it to function correctly.
+
+The whitepaper and this [discussion](https://github.com/WebOfTrust/keripy/discussions/837) contain information on how to select witness pool sizes and appropriate thresholds.
+Our sandbox environments deploy 6 witnesses by default, and our wallet uses a threshold of 4 for this pool size.
+
+```ts useLineNumbers
+const result = await client.identifiers().create("Alice", {
+  toad: 4,
+  wits: [
+    "BBilc4-L3tFUnfM_wJr4S4OJanAv_VmF_dJNN6vkf2Ha",
+    "BLskRTInXnMxWaGqcpSyMgo0nYbalW99cGZESrz3zapM",
+    "BIKKuvBwpmDVA4Ds-EpL5bt9OqPzWPja2LigFYZN2YfX",
+    "BM35JN8XeJSEfpxopjn5jr7tAHCE5749f0OobhMLCorE",
+    "BIj15u5V11bkbtAxMA7gcNJZcax-7TgaBMLsQnMHpYHP",
+    "BF2rZTW79z4IXocYRQnjjsOuvFUQv-ptCf8Yltd7PfsM"
+  ]
+});
+```
+
+The above witnesses are demo witnesses from the `kli witness demo` function of the keripy kli.
+
+### End roles
+
+In order to generate an OOBI so you can share your identifier to start interacting with others, you will need to add an appropriate end role.
+In the KERIA/Signify stack, you will want to give your KERIA agent the `agent` role.
+As mentioned [here](../foundations/oobis), KERIA will have already configured it's location scheme endpoint.
+
+```ts useLineNumbers
+const result = await client.identifiers().addEndRole(prefix, "agent", client.agent!.pre);
+```
+
+### Interactions
+
+Creating an interaction event to anchor arbitrary data in our KEL is very easy.
+
+```ts useLineNumbers
+const data = {
+  d: "EGvs2tol4NEtRvYFQDwzRJNnxZgAiGbM4iHB3h4gpRN5",
+  i: "EJWgO4hwKxNMxu2aUpmGFMozKt9Eq2Jz8n-xXR7CYtY_"
+};
+const result = await client.identifiers().interact(prefix, data);
+```
+
+Here, we've made a commitment to 2 digests as an object, and the `interact` method can also be an array.
+You always want to limit the data you anchor to digests or SAIDs to avoid KEL bloat.
+If you have 500 entries in your KEL, and someone wants to verify the last entry, they shouldn't need to fetch all of your documents, just a small KEL with embedded digests.
+
+### Rotation
+
+Triggering a rotation event for a single-sig identifier in Signify will result in an update to both keys in your identifier.
+
+```ts useLineNumbers
+const result = await client.identifiers().rotate(prefix);
+```
+
+A rotation event can add and remove witnesses using the `adds`, `cuts` and `toad` parameters, as well as add arbirary data with the `data` field.
+There are other parameters too, mostly for multi-sig.
+
+```ts useLineNumbers
+const result = await client.identifiers.().rotate(prefix, {
+  adds: ["BKfweht5lOkjaguB5dz42BMkfejhBFIF9-ghumzCJ6nv"],
+  cuts: ["BBilc4-L3tFUnfM_wJr4S4OJanAv_VmF_dJNN6vkf2Ha"],
+});
+```

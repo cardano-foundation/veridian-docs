@@ -1,0 +1,74 @@
+---
+asIndexPage: true
+---
+
+import { Callout } from "nextra/components";
+
+# Protocols
+
+The [KERI whitepaper](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/KERI_WP_2.x.web.pdf) is over 140 pages long and has resulted in three separate specifications in Trust over IP: [KERI](https://trustoverip.github.io/tswg-keri-specification/), [ACDC](https://trustoverip.github.io/tswg-acdc-specification/) and [CESR](https://trustoverip.github.io/tswg-cesr-specification/).
+For now, we'll just give a brief overview, and hope to expand this section in the future.
+
+These protocols have been developed from the ground up with a first prinicples approach, which leads to needing to explain low level details and can be overwhelming at first.
+In actuality, these protocols are much less complex than meets the eye, and follow a minimally sufficient design approach.
+It's all about getting the right abstraction level - dApp developers in Cardano learn the eUTXO model, but they needn't learn the inner complexities of the Ouroboros consensus algorithm.
+
+## Key Event Receipt Infrastructure
+Many developers, particularly from blockchain backgrounds will be well accustomed to the concept of asymmetric crytography and digital signatures.
+Given a public-private key pair and some data, a digital signature can be used to prove that the controller of the private key signed the data.
+
+These attestions are very useful and form the basis of web and blockchain security.
+The identifier in this case is the public key.
+However, this is problematic when you consider that private keys can get compromised, and in general become more vulnerable the more they are used.
+A key rotation results in a new identifier, and possibly clunky attempts to relate the old identifier to the new one.
+
+KERI is a decentralized identifier protocol and infrastructure intended to solve the key management problem.
+It allows you to control an identifier which can be maintained as keys are rotated, and provides enterprise grade security with post-quantum secure identifiers, weighted threshold multi-sig, delegation and more.
+
+As a protocol, KERI is concerned with securely maintaining your identifiers even in the face of compromise or attack.
+It is very clever!
+
+## Authentic Chained Data Containers
+While KERI provides a way to attribute an attestation to an identifier, ACDCs provide structure to the data structures being signed.
+Currently, the most prominant use of ACDCs is to represent Verifiable Credentials in the KERI ecosystem.
+
+An ACDC is a data container that is created or issued by an issuing identifier.
+The schema or format of the data container is referenced within the ACDC as a [SAID](https://trustoverip.github.io/tswg-cesr-specification/#self-addressing-identifier-said), which prevents security issues prevelant in other Verifiable Credential protocols that rely on web-hosted JSON schema URLs.
+
+<Callout type="info">
+  In CESR encoding (see section below), the hash of the data is called the SAID or self-addressing identifier.
+  It is a content addressable identifier, similar to a CID in the IPFS ecosystem.
+  However in CESR, the SAID of a data structure or document is a field within the data structure itself.
+</Callout>
+
+To ensure authenticity, the SAID of the ACDC itself is embedded in the Key Event Log of the issuer which ensures it's issuance is signed.
+Using the Key Event Log here ensures that there is a strong binding between which keys were used to issue which ACDCs, despite key rotations.
+The lack of this binding in other ecosystems leads to complications such as a issuer key rotation effectively breaking the validation of all previously issued credentials.
+
+ACDCs can be targeted or untargeted:
+- Targeted ACDCs have an issuee (holder) field, and as such represent Verifiable Credentials.
+- Untargeted ACDCs do not, so they can be viewed more as Verifiable Statements - to whom it may concern. An IoT device reporting on it's sensor data would be a good example.
+
+Perhaps the most interesting aspect of ACDCs is that they can be chained together to form complex relationships.
+An individual ACDC can effectively be a node in a property graph with well defined edges, weights and rules on those edges - all defined in the schemas.
+This is incredibly powerful and allows us to represent trust chains and data provenance with extreme precision, all the time protected by KERI identifiers and credentials.
+
+## Composable Event Streaming Representation
+CESR is a serialization format for structured data that allows for both binary and textual representations interchangably.
+Every serialization format tries to balance a set of trade-offs; CESR has been designed with efficiency in mind for crytographically agile and crytographically heavy protocols, which we envision as the future where all data is signed at rest and in transport over the internet.
+It also solves many of the shortcomings of existing serialization formats, such as human-readable encodings being too verbose or how to represent a public key in the data.
+
+<Callout type="info">
+  This [slide deck](https://github.com/SmithSamuelM/Papers/blob/master/presentations/CESR_20_IIW2024A.pdf) outlines the design trade-offs, and highlights the massive reductions in size over both JSON and CBOR.
+</Callout>
+
+In CESR:
+- Unimportant whitespace differences do not impact the hash of the data.
+- The textual representation can be presented to users and developers for human friendliness, and the binary representation can be sent over the wire for efficiency and terseness. The hash does not change.
+- Crytographic primitives such as keys and hashes are first class citizens which avoids the issue of deciding on how to encode a public key.
+
+Fields are insertion-ordered which avoids the need for insecure canonicalization schemes.
+The order of the fields should be defined in the data structure's ecosystem - for example, KERI has a well defined order of top-level fields in a KERI event.
+
+Finally, everything in KERI and ACDC is identified using SAIDs, whether it be schemas, or nodes in an ACDC property graph.
+This allows clients to securely cache data and greatly contributes to the system scalability.
