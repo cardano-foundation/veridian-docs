@@ -3,14 +3,14 @@ import { Callout } from "nextra/components";
 # Identifiers
 
 As mentioned [before](../stack), booting a new agent on KERIA will result in a pair of delegated identifiers to secure the API - one at the edge, and another in the cloud.
-Beyond that, we can use the set of identifier interfaces in Signify to create user managed identifiers and we have a lot of flexibility in their configuration.
+Beyond that, we can use the set of identifier interfaces in Signify to create user managed identifiers, and we have a lot of flexibility in their configuration.
 
 In this section, we will just talk about single-sig identifiers to begin with.
-From a protocol perspective, a single-sig identifier is represented in the same way as a multi-sig identifier, except there is only signing and rotation key at a given time, with a threshold of 1.
+From a protocol perspective, a single-sig identifier is represented in the same way as a multi-sig identifier, except there is only one signing key and one rotation key at any given time, with a threshold of 1.
 
-Please check out the [KERI identifiers](../protocols/keri) section to understand identifiers are a protocol level first.
+Please check out the [identifier basics](../protocols/identifierbasics) section to understand identifiers at a protocol level first.
 
-## Signify identifiers
+## Managed identifiers
 
 Each identifier in Signify has a human readable name.
 This name can be used in other relevant APIs to reference the identifier in question, but we recommend using the identifier ID.
@@ -30,16 +30,16 @@ await client.identifiers().update(prefix, { name: "Bob" });
 ```
 
 As touched on in the [async](../foundations/async) page, this API will return an operation object which we must wait for completion.
-A single-sig identifier without witnesses will complete immediately, though.
-Anywhere in this document that we result a `result` or `operation` from an interface, we likely need to wait for it to complete.
+A single-sig identifier without witnesses will complete immediately.
+Anywhere in this document that we assign to a `result` or `operation` variable from a Signify call, we likely need to wait for it to complete.
 
 <Callout type="info">
   You will see several references to an identifier "prefix".
-  In general, identifier and prefix may be interchangably used but the prefix strictly refers to the self-certifying element of the identifier, such as `EMrT7qX0FIMenQoe5pJLahxz_rheks1uIviGW8ch8pfB`.
+  In general, identifier and prefix may be interchangeably used but the prefix strictly refers to the self-certifying element of the identifier, such as `EMrT7qX0FIMenQoe5pJLahxz_rheks1uIviGW8ch8pfB`.
   
   We prefer to use prefix when referring to the string itself, and identifier when referring to it from a data layer point of view, such as fetching, updating or deleting an identifier from the database.
   
-  An identifier may be namespaced to provide additional context on its usage, or even be a W3C DID in the form of did:webs, such as `did:webs:example.com:Ew-o5dU5WjDrxDBK4b4HrF82_rYb6MX6xsegjq4n0Y7M`.
+  Additionally, an identifier may be namespaced to provide additional context on its usage, or even be a W3C DID in the form of did:webs, such as `did:webs:example.com:Ew-o5dU5WjDrxDBK4b4HrF82_rYb6MX6xsegjq4n0Y7M`.
   Here, within this `did:webs` identifier, the prefix is `Ew-o5dU5WjDrxDBK4b4HrF82_rYb6MX6xsegjq4n0Y7M`.
 </Callout>
 
@@ -69,15 +69,15 @@ The above witnesses are demo witnesses from the `kli witness demo` function of t
 
 ### End roles
 
-In order to generate an OOBI so you can share your identifier to start interacting with others, you will need to add an appropriate end role.
+To generate an OOBI for your identifier, you will need to add an appropriate end role.
 In the KERIA/Signify stack, you will want to give your KERIA agent the `agent` role.
-As mentioned [here](../foundations/oobis), KERIA will have already configured it's location scheme endpoint.
+As mentioned [here](../foundations/oobis), KERIA will have already configured its location scheme endpoint.
 
 ```ts useLineNumbers
 const result = await client.identifiers().addEndRole(prefix, "agent", client.agent!.pre);
 ```
 
-### Interactions
+### Interaction events
 
 Creating an interaction event to anchor arbitrary data in our KEL is very easy.
 
@@ -89,7 +89,8 @@ const data = {
 const result = await client.identifiers().interact(prefix, data);
 ```
 
-Here, we've made a commitment to 2 digests as an object, and the `interact` method can also be an array.
+Here, we've made a commitment to 2 digests as an object.
+The `interact` method can also be an array.
 You always want to limit the data you anchor to digests or SAIDs to avoid KEL bloat.
 If you have 500 entries in your KEL, and someone wants to verify the last entry, they shouldn't need to fetch all of your documents, just a small KEL with embedded digests.
 
@@ -101,7 +102,7 @@ Triggering a rotation event for a single-sig identifier in Signify will result i
 const result = await client.identifiers().rotate(prefix);
 ```
 
-A rotation event can add and remove witnesses using the `adds`, `cuts` and `toad` parameters, as well as add arbirary data with the `data` field.
+A rotation event can add and remove witnesses using the `adds`, `cuts` and `toad` parameters, as well as add arbitrary data with the `data` field.
 There are other parameters too, mostly for multi-sig.
 
 ```ts useLineNumbers

@@ -3,7 +3,7 @@ import { Callout } from "nextra/components";
 # Async in KERI
 
 As we touched on previously, KERI was built with scalability in mind.
-Implementors of KERI strongly prefer asynchronous communications for its scalability, and is designed to handle out-of-order messaging.
+keripy strongly prefers asynchronous communications for scalability and is designed to handle out-of-order messaging.
 Even keripy and KERIA are both built on a powerful library for implementing hierarchical structured concurrency called [hio](https://github.com/ioflo/hio).
 
 As a result, most operations that you can perform with a Signify client are asynchronous.
@@ -27,7 +27,7 @@ In the above example, we are using the `GET /operations/{name}` endpoint to chec
 
 <Callout type="warning">
   A complete operation can have succeeded or failed.
-  In both cases `done` will be true, so you should check if there is an `error` in the operation response too.
+  In both cases, `done` will be true, so you should check if there is an `error` in the operation response as well.
 </Callout>
 
 Operations can be deleted afterwards if desired.

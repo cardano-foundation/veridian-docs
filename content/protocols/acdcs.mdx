@@ -1,3 +1,208 @@
-# ACDCs
+import { Callout } from "nextra/components";
 
-TODO
+# Authentic Chained Data Containers
+
+ACDCs give us a very powerful way to structure signed data, and create relationships between different identifiers and signed data.
+You don't need to use ACDCs to start using KERI to sign data everywhere, and in many cases you might want to avoid them to secure your solution faster.
+That being said, we strongly recommend taking advantage of ACDCs over time!
+
+As a basic idea, ACDCs are CESR data structures, a bit like JSON which follow a certain schema and are issued by a specific KERI identifier.
+ACDCs can be used to represent any signed data, including but not limited to Verifiable Credentials.
+
+<Callout type="info">
+  CESR streams support interleaved JSON, CBOR, MGPK and pure CESR serializations, and the JSON variant is most widely used right now.
+  This effectively means that data structures in the text domain (human friendly version) will look mostly like normal JSON and cryptographic primitives will appear as CESR qualified strings.
+  
+  You will often see `qb64` in the code which refers to the qualified base64 serialization (CESR's variant on base64, similar to base64url).
+  An identifier of `EGvs2tol4NEtRvYFQDwzRJNnxZgAiGbM4iHB3h4gpRN5` is in the `qb64` variant here.
+</Callout>
+
+## Primary top-level fields
+
+```json
+{
+  "v": "ACDC10JSON000197_",
+  "d": "EPWcaKebqazTinvxTwBXDwc2Wn5tudinQePQfjsvAOeS",
+  "u": "0AG7OY1wjaDAE0qHcgNghkDa",
+  "i": "EJ43lGaMyW8Jfyfd8DEKqeJbmufjQf4cmF63FcHZ6eNb",
+  "ri": "EAsc5I_gAqiOQ1ZFk147Obtzc_zNmb_XrMJkhmShdRTN",
+  "s": "EBfdlu8R27Fbx-ehrqwImnK-8Cm79sqbAQ4MmvEAYqao",
+  "a": {
+    "d": "EPA-kPyh4i97cHNyoz-R3uy_SkZqwWzTMYxt5l3EhFas",
+    "u": "0ADaG7OaDAE0qHcgY1Nghkwj",
+    "i": "EA32XMQwdzVBqQIZ6T9ILTCiHK3twjRuzuXTbwyfQWX3",
+    "LEI": "5493001KJTIIGC8Y1R17",
+    "dt": "2025-03-31T16:36:57.324000+00:00"
+  }
+}
+```
+
+The `v` field indicates the version (which you can see includes `JSON`), and the `d` field is the SAID, or digest of the ACDC itself.
+
+### Schemas
+
+Here, we have QVI credential from the vLEI ecosystem.
+We know this because the `s` field determines what schema is being used, and the produced ACDC must follow the rules of the schema.
+
+Schema identifiers are always a SAID of the schema itself.
+This ensures ACDCs are cryptographically bound to a particular schema, and secure from any vulnerabilities of schema URLs in other ecosystems.
+
+### Issuers
+
+This ACDC has been issued by the identifier `EJ43lGaMyW8Jfyfd8DEKqeJbmufjQf4cmF63FcHZ6eNb`, marked in the `i` field.
+This credential won't be valid unless signed by this identifier, and we'll shortly cover [how exactly](#kel-anchoring) it's signed.
+
+### Registries
+
+The `ri` field represents the registry identifier.
+We'll touch on registries in more detail [later](../apis/credentials#registries).
+
+For now, just think of a registry as a place to store the status of a credential, issued or revoked, and control who is allowed issue or revoke ACDCs in that registry.
+The above ACDC won't be valid unless the issuing identifier has authority within the registry, `EAsc5I_gAqiOQ1ZFk147Obtzc_zNmb_XrMJkhmShdRTN`.
+
+### Privacy
+
+Many ACDCs that are issued will be considered private, particularly if they contain personal information.
+The `u` field is optional, and if present, the ACDC is considered a private ACDC.
+
+This field should contain a randomly generated salt of sufficiently entropy.
+In case a 3rd party has access to the schema, and SAID of an ACDC, the salt provides sufficient entropy to make it computationally infeasible to discover or calculate the remaining values of the ACDC.
+
+This `u` field can also appear in any block within the ACDC to protect the privacy of the block when partially or selectively disclosing that information.
+Each `u` field within an ACDC should be different.
+
+### Attributes
+
+The `a` field contains the attributes block, where you will find any user relevant data.
+- `a.d`: Reserved as the SAID of the attributes block.
+- `a.i`: Issuee or holder field.
+- `a.dt`: Reserved for the issuance timestamp.
+
+The schema defines any custom attributes, and in this case there is only the `LEI` field.
+However, since the issuee or holder is an optional feature in ACDCs, the schema decides whether `a.i` exists or not.
+In this case, since the QVI ACDC is a credential, it's required.
+
+### Compacting
+
+The above attributes block contains it's own SAID which allows us to replace the entire block with a SAID to "compact" it.
+This enables graduated disclosure in presentations, where the contents of the block can be hidden until necessary.
+
+It can also enable caching via the SAID in scenarios where the other party might already know the contents from some other interaction.
+This caching is particularly useful when dealing with edges when chaining, which we will see shortly.
+
+The following is the compacted form of the QVI credential from earlier.
+
+```json
+{
+  "v": "ACDC10JSON000197_",
+  "d": "EPWcaKebqazTinvxTwBXDwc2Wn5tudinQePQfjsvAOeS",
+  "u": "0AG7OY1wjaDAE0qHcgNghkDa",
+  "i": "EJ43lGaMyW8Jfyfd8DEKqeJbmufjQf4cmF63FcHZ6eNb",
+  "ri": "EAsc5I_gAqiOQ1ZFk147Obtzc_zNmb_XrMJkhmShdRTN",
+  "s": "EBfdlu8R27Fbx-ehrqwImnK-8Cm79sqbAQ4MmvEAYqao",
+  "a": "EPA-kPyh4i97cHNyoz-R3uy_SkZqwWzTMYxt5l3EhFas"
+}
+```
+
+Note that the top-level `d` field does not change, since SAIDs are always calculated in the compacted form.
+Secondly, the SAID of the attributes field must be calculated before the top-level SAID.
+
+## KEL anchoring
+
+Since the signing keys related to a given identifier can change over time, we cannot trust signatures from old keys that were rotated away.
+This leaves us with 2 options:
+1. The issuer signs the ACDC issuance, and the verifier ensures that the signatures matches the latest, current signing keys of the issuer.
+2. We cryptographically relate the order of events between issuances and key rotations.
+
+The first approach is very limiting because if an issuer rotates their keys, the validation of all previously issued ACDCs breaks.
+This disincentivizes key rotation, which can over-expose the issuer keys and leads to compromise.
+
+In a blockchain based identity system, the second could be achieved by anchoring the digest of the ACDC issuance onto the ledger for strict ordering.
+KERI does something similar, since a KEL is a mini-blockchain in itself.
+We simply need to create an [interaction](./identifierbasics#key-event-logs) event with the digest of the ACDC issuance.
+
+In KERI, this has 2 key advantages:
+1. Key rotation doesn't invalidate previously issued ACDCs.
+2. Controllers can "watch" their own identifiers, and if a new event is added to their KEL which seems suspicious (not signed from their wallet, happens outside of business hours, etc), they can be alerted and react instantly.
+
+The second advantage is particularly interesting because all other security systems suffer from not being able to detect key compromise quickly enough, giving an attacker too much time to cause damage while undetected.
+Often, systems are attacked at the edge and privileges are gradually escalated over time, so time is the last thing we want to gift an attacker.
+This [presentation](https://github.com/SmithSamuelM/Papers/blob/master/presentations/KERI_Appraisal.pdf) covers the topic in more detail.
+
+This approach should be applied when signing _anything_ in KERI that is not ephemeral, whether it involves ACDCs or not.
+
+## Chaining
+
+ACDCs as we've seen them so far provide a secure way to create Verifiable Statements (untargeted) or Verifiable Credentials (targeted).
+On top of this, ACDCs can be chained together much like X.509 certificate chains, but with a lot more power and flexibility.
+
+Together, a set of ACDCs can form a property graph, where each ACDC is a node in the graph with edges between nodes.
+Nodes can have multiple edges, and edges can contain operators and weights.
+
+This enables a way to securely represent provenance over data, backed with credentials, and form relationships between entities.
+Combined with KERI's enterprise-grade identifiers, this enables true organizational identity.
+
+### Edge groups and operators
+
+The rules for how ACDCs can be chained together is outlined in the schemas, as one schema can reference another schema.
+Within a schema, the `e` field defines the correct edge logic for the ACDC issuance to be considered valid.
+
+The top-level `e` field defines the edge group.
+Edge groups can contain individual edges, or nested edge groups.
+
+Edge groups have m-ary operators, such as `AND`, `OR`, `NOR` and so on.
+The operator dictate how the edge group is cryptographically validated, and the default is `AND`.
+
+For example, the schema might define a top-level edge group which has 2 individual edges.
+So by default, if we issue an ACDC, it must be chained to 2 other ACDC nodes which match the schema.
+Or we could change the operator to `OR`, and it only needs 1 valid edge.
+
+<Callout type="warning">
+  If a credential within the chain is revoked, it doesn't break cryptographic verifiability.
+  You might be verifying evidence from the past before the revocation, or there could be a grace-period until revocation is settled.
+  Hence, your business logic should take the revocation status into account separately.
+</Callout>
+
+### Edge operators
+
+Individual edges also have their own operators, which are unary operators.
+The default operator on edges is `I2I`, which states that the issuer of this ACDC must be the issuee of the referenced edge ACDC.
+
+### Weights
+
+Edges can also have optional weights, and they do not impact the cryptographic verifiability of the property graph.
+Instead weights should influence business logic.
+The semantics of what a weight means on an edge is determined by the ecosystem itself, and every ecosystem should write an Ecosystem Governance Framework (EGF) to give meaning to ACDCs, schemas and edges.
+
+### Example
+
+```json
+"e": {
+  "d": "EAsc5I_gAqiOQ1ZFk147Obtzc_zNmb_XrMJkhmShdRTN",
+  "u": "0AwjaDAE0qHcgNghkDaG7OY3",
+  "cred": {
+    "d": "EA32XMQwdzVBqQIZ6T9ILTCiHK3twjRuzuXTbwyfQWX3",
+    "u": "0ANghkDaG7OY1wjaDAE0qHca",
+    "n": "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
+    "s": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw"
+  },
+  "data": {
+    "d": "EJ43lGaMyW8Jfyfd8DEKqeJbmufjQf4cmF63FcHZ6eNb",
+    "u": "0ADAE0qHcgNghkDaG7OY1wjx",
+    "n": "EPWcaKebqazTinvxTwBXDwc2Wn5tudinQePQfjsvAOeS",
+    "s": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
+    "o": "NI2I"
+  }
+}
+```
+
+In this scenario, there are 2 edges which are both required.
+The issuee of the referenced `cred` edge must be the issuer of this ACDC.
+The issue of the referenced `data` edge cannot be the issuer of this ACDC.
+
+## Ricardian contracts
+
+The optional top-level `r` field defines Ricardian Contracts, or rules to associate with the ACDC.
+Ricardian Contracts are both machine and human readable legal language.
+
+The rules section enables ACDC's graduated disclosure to be contractually-protected, though it remains to be seen how these will be enforced on a use case by use case basis.
