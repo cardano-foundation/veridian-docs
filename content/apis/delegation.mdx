@@ -1,0 +1,30 @@
+
+import { Callout } from "nextra/components";
+
+# Delegation
+
+Please make sure to read the protocol [delegation section](../protocols/delegation) first.
+Delegated authority via ACDCs is covered already by issuing ACDCs with edges.
+
+## Delegated identifiers
+
+Creating a delegated identifier in KERI is pretty simple.
+The delegate points to the delegator using the `delpre` field.
+This will insert the delegator prefix within the inception event of the delegate.
+The delegate identifier will be pending until the delegator anchors the prefix and sequence number (`0` to begin with) in their KEL.
+
+```ts useLineNumbers
+const result = await delegateClient.identifiers().create(
+  "delegate",
+  { delpre: delegatorPrefix }
+);
+
+// Inception event in this case
+const anchor = {
+  i: delegatePrefix,
+  s: "0",
+  d: delegatePrefix,
+};
+
+const result = await delegatorClient.delegations().approve(delegatorPrefix, anchor);
+```

@@ -1,4 +1,5 @@
 export default {
-  basicidentifiers: "KERI Identifiers",
-  delegation: "Delegation"
+  identifierbasics: "Identifier basics",
+  acdcs: "ACDCs",
+  delegation: "Delegation",
 };

@@ -1,9 +1,11 @@
 
 import { Callout } from "nextra/components";
 
-# KERI Identifiers
+# Basics to KERI identifiers
 
-### Identifier types
+Before delving into creating your own identifiers, it's important to understand how they are structured in KERI, and how the security is maintained.
+
+## Identifier types
 **Non-transferable:** The most basic form of a KERI identifier is a non-transferable identifier, which is an identifier that cannot be rotated after being created.
 Non-transferable identifiers should only be used for ephemeral limited-use identifiers, such as tunneling communications for metadata privacy like in the [Trust Spanning Protocol](https://trustoverip.github.io/tswg-tsp-specification/).
 
@@ -23,7 +25,7 @@ At any given time, transferable identifier contains 2 sets of keys:
 The sets will contain more than 1 key for multi-sig identifiers.
 A rotation event uses the rotation keys to update these sets of keys.
 
-### Key Event Logs
+## Key Event Logs
 From here on, transferable is assumed when we mention identifiers, for brevity.
 An identifier is created by generating keys from entropy, and creating an inception event.
 
@@ -33,7 +35,7 @@ An inception event is only valid if signed by the current signing private keys (
 This type of identifier is known as a Self-Certifying Identifier because control over the identifier is established using crytography alone.
 KERI extends this idea into an Autonomic Identifier, where the Self-Certifying Identifier is autonomous in its ability to update its key material over time.
 
-Each identifier has a Key Event Log, or KEL for short, which is a hash-chained data structure that shows the history of the identifier.
+Each identifier has a Key Event Log, or KEL for short, which is a hash-chained data structure that shows the history of the identifier; essentially a mini blockchain.
 Each KEL starts with an inception event.
 
 **Events:** A KEL has 2 types of events:
@@ -51,7 +53,7 @@ Any non-ephemeral signatures which we will need to verify any time in the future
 
 Note! An establishment event can also anchor arbitrary data.
 
-### Pre-rotation
+## Pre-rotation
 
 A shortcoming of other decentralized identifier systems is that the current signing key is used to rotate to the new key.
 However, keys used to sign anything become exposed over time, whether through their environment or cryptanalysis.
@@ -71,7 +73,7 @@ A KERI event never contains public keys of the current rotation key set, but rat
 This protects the keys in the event of a quantum event, and allows a controller to regain control of their identifier, and if available, rotate to a quantum secure key pair in the future.
 In fact, for high security environments, an identifier can be configured to only allow establishment events, so every event in the KEL would be an inception event or rotation event.
 
-### Witnesses and watchers
+## Witnesses and watchers
 
 The controller of identifier is the primary root of trust of that identifier.
 Each event in the KEL is only valid if it's signed by a threshold amount of keys from the controller.
@@ -104,5 +106,3 @@ All in all, this ensures KEL updates are distributed across the network as quick
 </Callout>
 
 Watcher integration with KERIA is still pending.
-
-### Delegation

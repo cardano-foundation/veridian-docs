@@ -1,0 +1,65 @@
+import { Callout } from "nextra/components";
+
+# Delegation
+
+Delegation in KERI comes in different forms, motives and trade-offs.
+Understanding where and how to apply delegation is important as it's very powerful.
+
+## Delegated authority
+
+When most of us think of delegation, we most likely think of the idea of allowing someone to act on our behalf.
+You could use delegated identifiers to achieve this, but this is limited in flexibility.
+
+Either a delegated identifier means you are delegating _all_ authority you have, which is perhaps not the best idea.
+Or, within your ecosystem, delegated identifiers can have a well defined meaning, but this is limiting.
+
+Delegated authority is much better achieved using credentials, particularly because of ACDC's ability to form property graphs.
+For example, an IoT device could be issued a credential which allows them to report readings in a certain area of a factory.
+Each reading can be an untargeted ACDC which is chained back to their credential, and valid until revocation.
+
+<Callout type="info">
+  Since ACDC issuances are anchored in issuer KELs, and a property graph may contain many different issuers, determining when an issuance and revocation occured is a little harder.
+  One solution is to additionally require anchoring on a blockchain to finalise issuance or revocation, which gives a single source of truth.
+  This [discussion](https://github.com/WebOfTrust/keripy/discussions/597) covers some alternative approaches that maintain KERI's global interopability.
+</Callout>
+
+## Delegated identifiers
+
+Aside from the aforementioned method of using delegated identifiers to achieve delegated authority, there are 2 better functions.
+
+### Top-down hierarchical recovery
+
+KERI uses what is known as cooperative delegation, where a delegation relationship requires buy in from both parties, and results in some great security advantages.
+The delegator will create their identifier as normal, and a delegate will embed the delegator prefix within their inception, or rotation event to begin the delegation process.
+A delegation is not complete until the delegator in turn anchors a reference to the delegate's KEL event in their own.
+
+So, it's as if the delegate asks to be delegated to, and the delegator approves.
+From here on out, every establishment event performed by the delegate must be approved by the delegator, again, by anchoring the establishment event in their KEL.
+However, it is possible to change the delegator identifier in this relationship, if approved by the old delegator - something to keep in mind!
+
+From a recovery point of view, this means if the delegate identifier is compromised, including the rotation keys, a second-factor approval from the delegator is required.
+In case the delegator approves accidentally, they have a second chance to approve a new rotation event which overrules the first.
+No third chance!
+
+This is part of KERI's superseded recovery mechanism, as has quite a few more details, whether it involves delegation or not.
+You can for example chain together delegated identifiers so approval needs to go right up the chain.
+
+KERI goes to great lengths to ensure secure identifiers that are recoverable on compromise.
+A delegated, fractionally weighted threshold multi-sig identifier with a threshold number of witnesses and pre-rotated keys is quite the secure identifier!
+
+### Scalability
+
+There are 2 aspects to scalability that delegated identifiers can solve.
+In both cases, the `DelegateIsDelegator` trait can be useful to indicate that the delegator and delegate are the same entity, and the separation into multiple identifiers is intended for scability reasons.
+
+Firstly, when you are signing many things on a regular basis, this will lead to a growth of your KEL, much like a blockchain.
+This "KEL bloat" can be minimized by creating numerous delegation relationships to offload signatures to other identifiers and have a strategy to segregate signing.
+This way, you can direct a verifier on where to look, and avoid needing to validate many other irrelevant events.
+
+Even more interestingly, since there can be multiple delegate's for a given delegator, we can form a tree like structure where the root identifier is the original identifier, and everything below scales.
+Not only does this give you flexibility in how you segregate signing, it leads to the ability to concurrently sign with many identifiers that all lead back to the root.
+
+Now that's powerful!
+Identifiers can live in different processes, machines or even continents but all be tied to represent the same entity.
+In reality, this empowers an elastic signing infrastructure which is key to adoption of zero trust networking.
+Many can't accept the performance hit of signing everything at rest and in transport, but the scalability of CESR and delegated KERI identifiers can change that. 
