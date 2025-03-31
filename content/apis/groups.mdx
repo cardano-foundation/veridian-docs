@@ -1,0 +1,253 @@
+import { Callout } from "nextra/components";
+
+# Groups
+
+A fundamental aspect of organizational identity is group multi-sig identifiers.
+Let's explore KERI's approach from an implementation point of view, which helps things like group coordination.
+
+<Callout type="info">
+  Multi-sig identifiers could be used to represent the same person for recovery purposes, such as multi-device.
+  For now, we assume a group of different people or machines.
+</Callout>
+
+The `multisig-incept.test.ts` integration test can be used to reference.
+
+## Group creation
+
+From a protocol perspective, a group is a single multi-sig identifier, where keys are controlled by different wallets.
+The protocol doesn't concern itself with how those keys are controlled, or how signatures are collected, but `keripy` has a certain approach.
+
+Each member of a group creates a member identifier which is single-sig.
+The member identifiers can be used to communicate amongst themselves, and the key state of each member identifier can "copied" into the multi-sig events.
+
+So each member of the group will have 2 managed Signify identifiers for every group:
+1. Their local member identifier, which is single-sig.
+2. Their group identifier, which is multi-sig.
+
+<Callout type="warning">
+  Ideally, each member should use watchers to watch every other group member.
+  This protects against compromise of a group member, as well as if any member suddenly becomes malicious.
+
+  As such, member identifiers should use witnesses as well despite not being a public facing identifier.
+</Callout>
+
+In the Signify APIs, and certainly if you ever contribute back to keripy ot KERIA, you will notice `mhab` and `ghab`.
+A habitat, or hab is the term in keripy used to describe an identifier at the data layer.
+Hence, `mhab` is member hab, and `ghab` is group hab.
+
+### Setup local member identifiers
+
+All that's required at this stage is each member creates a single-sig identifier, and [OOBIs](../../foundations/oobis) are exchanged.
+A member identifier should only be used for a single group, and not otherwise re-used.
+This ensures:
+- A clean separation in general.
+- A key compromise doesn't impact multiple identifiers or groups, only one.
+- Creating a group with the same members, and parameters such as threshold might result in the same group identifier prefix.
+See the next section below.
+
+### Inception
+
+As we know, the prefix of a group identifier is the digest of the inception event.
+This time, the inception event will contain multiple signing keys, and next key digests, as well as thresholds for both.
+Since it's a digest, a different initial digest, or a different ordering of the keys results in a different identifier.
+
+```ts useLineNumbers
+import { Algos } from "signify-ts";
+
+const memberStates = [];
+for (const memberPrefix of membersPrefixes) {
+  const state = await client.keyStates().get(memberPrefix);
+  memberStates.push(state[0]);
+}
+
+const mhab = await client.identifiers().get(memberPrefix);
+const result = await client.identifiers().create(groupName, {
+  algo: Algos.group,
+  mhab,
+  isith: 2,
+  nsith: 2,
+  toad: 2,
+  wits: [
+    "BBilc4-L3tFUnfM_wJr4S4OJanAv_VmF_dJNN6vkf2Ha",
+    "BLskRTInXnMxWaGqcpSyMgo0nYbalW99cGZESrz3zapM",
+    "BIKKuvBwpmDVA4Ds-EpL5bt9OqPzWPja2LigFYZN2YfX"
+  ],
+  states: memberStates,
+  rstates: memberStates
+});
+```
+
+`isith` represents the current signing threshold, which can be different to `nsith`, the rotation threshold.
+If an integer is used, each member has equal rights but KERI supports fractionally weighted thresholds too.
+A thresholf of `["2/3", "1/3", "1/3"]` requires signatures from Alice and Bob, or Alice and Carol.
+However Bob and Carol together cannot complete signing as their thresholds only sum to `2/3`, which is less than 1.
+
+In this particular example, each group member contributes current signing keys and next key digests, so each member has partial control of signing and rotation of the identifier.
+You could choose to separate the member identifiers which can sign and which can rotate, such as for custodial use cases.
+
+The inception event is not valid until a threshold amount sign it, `isith`.
+Each interaction event thereafter also requires `isith` signatures, and a rotation event requires `nsith`.
+Of course, after being sufficiently signed by the group members, it will then need to be sufficiently witnessed by the witnesses.
+
+#### Retrieving states
+
+In the above example, we used the `keyStates().get` method to retrieve the current key state of an identifier.
+The state returned is the last known state our KERIA agent is aware of.
+
+The `keyStates().query` method can be used to fetch key state updates for an identifier.
+This will be better handled when watchers are integrated into KERIA, and updates can come continuously with stronger security guarantees.
+For us, this is on our near term roadmap to implement.
+
+#### Coordination
+
+It's up to your application to decide on how to coordinate who should create the inception event.
+In our wallet, there is a designated group initiator or leader, and we plan on adding functionality to be able to update the leader at a later point.
+
+When the initiator of the group is ready, they can create the group using `identifiers().create()`.
+After, they must send the inception event to the other group members as a signaling mechanism.
+
+```ts useLineNumbers
+import { d, Siger } from "signify-ts";
+
+// const result = await client.identifiers().create(...
+const serder = result.serder;
+
+const sigers = result.sigs.map(sig => new Siger({ qb64: sig }));
+const ims = d(messagize(serder, sigers));
+const atc = ims.substring(serder.size);
+const embeds = { icp: [serder, atc] };
+
+const smids = memberStates.map((state) => state["i"]);
+
+await client.exchanges().send(
+  memberPrefix,
+  groupPrefix,
+  mhab,
+  "/multisig/icp",
+  { gid: serder.pre, smids, rmids: smids },
+  embeds,
+  otherMemberPrefixes
+);
+```
+
+This creates an exchange message with route `/multisig/icp` that's signed by the member identifier, and sent to all other members to signal.
+The partially signed inception event (`serder`) is embedded within the exchange message, but the exchange message itself is fully signed because it was sent from the member identifier.
+
+This allows the other group members to listen for notifications on that route.
+If they are happy with the inception event, they can sign it too by calling `identifiers().create()` and sending back the same `/multisig/icp` messages to signal they have joined.
+
+<Callout type="warning">
+  For a given group, the `smids` array contains each of the local member prefixes for each member.
+  `rmids` is the same but for rotation, and in many cases the 2 arrays will be the same.
+
+  When sending exchange messages, such as IPEX messages with KERIA, once it is fully signed the group leader will send the message to the recipient, such as the issuer.
+  The group leader is the first identifier in the `smids` array, and in this sense, the message will only actually get sent if the leader has contributed to the signatures.
+  
+  Please see [this discussion](https://github.com/WebOfTrust/keripy/discussions/934) related to group coordination; right now we recommend that the group leader always be the first to sign any message.
+</Callout>
+
+#### Long running operations
+
+Long running operations for group creation and rotation will only complete once sufficiently signed by other group members (and witnessed).
+The same applies for sending an exchange message, it won't complete until sufficiently signed.
+Hence, the operation completion signals we've collected enough signatures!
+
+### Group OOBIs
+
+For a single-sig identifier, setting up the OOBI was pretty straight forward.
+We simply authorized our KERIA agent to have the `agent` end role, which under the hood is signing an end role authorization object.
+
+For groups, if Alice wants to authorize _her_ KERIA agent in this role, a threshold amount will need to sign the end role object too.
+This needs to be repeated for each group member and their KERIA agent if we want all members to receive notifications.
+
+However, there are cases where that would be unnecessary, such as if one group member was only used for disaster recovery purposes and was not concerned with signing IPEX messages.
+Adjust as you see fit!
+
+```ts useLineNumbers
+const members = await client.identifiers().members(groupPrefix);
+```
+
+The above call will return the `smids` and `rmids` lists with more details, such as the existing end role authorizations for member identifiers.
+This means every member could automatically authorize every relevant KERIA agent quite easily.
+A rough example might look something like:
+
+```ts useLineNumbers
+const members = await client.identifiers().members(groupPrefix);
+
+for (const member of members.signing) {
+  const eid = Object.keys(member.ends.agent)[0];
+  const endRoleResult = await client.identifiers().addEndRole(
+    groupPrefix,
+    "agent",
+    eid,
+    new Date().toISOString().replace("Z", "000+00:00")
+  );
+  await endRoleResult.op();
+
+  const rpy = endRoleResult.serder;
+  const seal = [
+    "SealEvent",
+    {
+      i: groupPrefix,
+      s: gHab.state["ee"]["s"],
+      d: gHab.state["ee"]["d"]
+    }
+  ];
+  const sigers = endRoleResult.sigs.map((sig: string) => new Siger({ qb64: sig }));
+  const roleims = signify.d(signify.messagize(rpy, sigers, seal, undefined, undefined, false));
+  const atc = roleims.substring(rpy.size);
+  const roleembeds = { rpy: [rpy, atc] };
+
+  await client.exchanges().send(
+    memberPrefix,
+    groupPrefix,
+    mhab,
+    "/multisig/rpy",
+    { gid: groupPrefix },
+    roleembeds,
+    otherMemberPrefixes
+  );
+}
+```
+
+### Using the identifier
+
+Signing will either be KEL-backed, such as for credential issuance, or ephemeral, such as for IPEX.
+
+#### KEL-backed
+
+KEL-backed will either involve directly calling `identifiers.interact()` or indirectly by creating a registry, or issuing a credential, etc.
+After performing the interaction event, it will be partially signed until enough members join.
+
+Like we did for the group inception and end role authorization, we will signal to other group members using exchange messages.
+The route of the exchange message depends on the action being performed:
+- `/multisig/vcp`: Registry creation
+- `/multisig/iss`: ACDC issuance
+- `/multisig/rev`: ACDC revocation
+- `/multisig/ixn`: Other interaction event
+
+#### Exchange messages
+
+When creating an exchange message for a group:
+1. One member creates the message, and the sender of the exchange message is the group identifier.
+2. The member embeds the partially signed group message within another exchange message.
+3. The wrapping exchange message sender is the local group member, so it is immediately fully signed.
+4. This message is sent to other group member identifiers with the `/multisig/exn` route, and the other members can extract the embedded group message and sign it.
+
+### Rotation
+
+The keys from the inception event were sourced from the local member identifier KELs.
+We continue this practice for every rotation event thereafter.
+
+As such, the general flow is:
+1. Group members decide to rotate out of band. (coordinate based on your needs)
+2. Each group member rotates their single-sig identifier.
+3. A group member (most likely the leader) creates the rotation event, and signals in the same way as for inception, except using the `/multisig/route` route.
+
+#### Partial rotation
+
+In the above steps, every group member rotated their keys.
+There may be scenarios where you only want some members to rotate, and others to maintain their keys.
+This is allowed as long as a rotational-threshold amount of group members rotate their keys.
+
+Check out this [excellent article](https://medium.com/finema/keri-jargon-in-a-nutshell-part-1-fb554d58f9d0#8e29) for more information, in the section `Partial Pre-Rotation`.

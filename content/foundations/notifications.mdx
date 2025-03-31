@@ -1,0 +1,40 @@
+import { Callout } from "nextra/components";
+
+# Notifications
+
+KERIA runs CESR parser which can parse KERI and CESR events.
+These events can be user triggered (e.g. creating an identifier) or they could be received from the public endpoint from other KERI agents trying to interact with you.
+
+Whenever certain event types are processed successfully, notifications will be triggered.
+Most notifications generally relate to receiving new exchange (exn) messages, most commonly IPEX (`/exn/ipex/*`) or group coordination messages (`/multisig/*`).
+
+For example, if you are being issued a credential, you will receive a notification which looks something like this:
+```json
+{
+  "i": "0ACLhRGzyQnNu17Kn8NR2Mtr",
+  "dt": "2025-03-27T14:14:58.609560+00:00",
+  "r": false,
+  "a": {
+    "r": "/exn/ipex/grant",
+    "d": "EEWOwbmK8n8pu2whXfhuVdMk8jJKI1TFMxs8_JFNq0YK",
+    "m": ""
+  }
+}
+```
+
+Here, we have a notification with ID `0ACLhRGzyQnNu17Kn8NR2Mtr` route `/exn/ipex/grant`.
+It doesn't tell us anything about the exn message itself except it's ID, in the `a.d` field.
+
+`client.exchanges().get(notification.a.d)` can be used to retrieve the exchange message itself, which contains more relevant information for that specific notification.
+
+## Fetching
+
+A paginated list of notifications can be retrieved using the `notifications().list()` method.
+Notifications can be marked as read, which updates the `r` field, or deleted to remove completely.
+
+<Callout type="info">
+  At the time of writing, there is no way to filter the `list()` method by read or unread.
+  PRs are welcome!
+</Callout>
+
+Of course, a more event driven approach will eventually come, in the same manner as for [operation tracking](./async).

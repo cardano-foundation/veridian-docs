@@ -1,0 +1,108 @@
+
+import { Callout } from "nextra/components";
+
+# Basics to KERI identifiers
+
+Before delving into creating your own identifiers, it's important to understand how they are structured in KERI, and how the security is maintained.
+
+## Identifier types
+**Non-transferable:** The most basic form of a KERI identifier is a non-transferable identifier, which is an identifier that cannot be rotated after being created.
+Non-transferable identifiers should only be used for ephemeral limited-use identifiers, such as tunneling communications for metadata privacy like in the [Trust Spanning Protocol](https://trustoverip.github.io/tswg-tsp-specification/).
+
+Typically, non-transferable identifiers can be represented by just their public key in CESR.
+Ed25519 public keys in CESR start with the `B` code in the text domain.
+It's possible to create a non-transferable identifier using a Key Event Log too, but the use cases are limited.
+
+<Callout type="info">
+  This [Github discussion](https://github.com/WebOfTrust/keripy/discussions/612) is a good reference for the CESR 2.0 codes.
+</Callout>
+
+**Transferable:** Identifiers that are meant to be long-lived and represent a person, entity or machine should use a transferable identifier which can be rotated.
+At any given time, transferable identifier contains 2 sets of keys:
+- Current signing key set
+- Rotation key set
+
+The sets will contain more than 1 key for multi-sig identifiers.
+A rotation event uses the rotation keys to update these sets of keys.
+
+## Key Event Logs
+From here on, transferable is assumed when we mention identifiers, for brevity.
+An identifier is created by generating keys from entropy, and creating an inception event.
+
+**Inception:** The inception event is a CESR data structure that contains public key information, witness identifiers, thresholds and more.
+An inception event is only valid if signed by the current signing private keys (a threshold amount in the case of a multi-sig identifier).
+
+This type of identifier is known as a Self-Certifying Identifier because control over the identifier is established using crytography alone.
+KERI extends this idea into an Autonomic Identifier, where the Self-Certifying Identifier is autonomous in its ability to update its key material over time.
+
+Each identifier has a Key Event Log, or KEL for short, which is a hash-chained data structure that shows the history of the identifier; essentially a mini blockchain.
+Each KEL starts with an inception event.
+
+**Events:** A KEL has 2 types of events:
+- Establishment events
+- Non-establishment events
+
+Establishment events change the key state, whereas non-establishment events do not.
+The inception event is an establishment event.
+
+Non-establishment events allow you to anchor arbitrary data in the KEL to sign it, such as issuing a credential.
+An interaction event is the more common name for this type of event.
+
+You can also use your identifier to create normal signatures which are not part of the KEL, but it should only be used in ephemeral, low-risk situations such as logging into a system.
+Any non-ephemeral signatures which we will need to verify any time in the future, or which are sensitive from a security perspective should be done using interaction events.
+
+Note! An establishment event can also anchor arbitrary data.
+
+## Pre-rotation
+
+A shortcoming of other decentralized identifier systems is that the current signing key is used to rotate to the new key.
+However, keys used to sign anything become exposed over time, whether through their environment or cryptanalysis.
+Once the key is lost, the identifier is lost.
+
+KERI separates signing keys and rotation keys to ensure that a compromise of signing keys does not result in a lost identifier.
+A rotation event for an identifier is only valid if signed using the rotation keys, which were commited to in the previous establishment event.
+
+For each rotation event, it must be signed by a threshold number of rotation keys.
+The rotation threshold can be different to the current signing threshold.
+For any rotation key that is used in a rotation event, the public key of the rotation key must replace the corresponding current signing key.
+This phases out old keys in favour of rotation keys, and new rotation keys get added.
+
+**Quantum security:** It even goes a step further, and completely hides the rotation key until it's needed to verify a new rotation event.
+A KERI event never contains public keys of the current rotation key set, but rather a hash or digest of each of the public keys.
+
+This protects the keys in the event of a quantum event, and allows a controller to regain control of their identifier, and if available, rotate to a quantum secure key pair in the future.
+In fact, for high security environments, an identifier can be configured to only allow establishment events, so every event in the KEL would be an inception event or rotation event.
+
+## Witnesses and watchers
+
+The controller of identifier is the primary root of trust of that identifier.
+Each event in the KEL is only valid if it's signed by a threshold amount of keys from the controller.
+
+KERI has a concept known as witnesses, which can serve as the secondary root of trust for identifiers.
+Effectively, you can designate a set of witnesses to "witness" your KEL event for it to be valid.
+There is also a threshold for witness signatures, and a rotation event can change the set of witnesses and threshold.
+
+<Callout type="info">
+  Another use for non-transferable identifiers are witnesses.
+  A witness identifier isn't necessarily meant to be ephemeral, but in case a witness is compromised, any identifiers using that witness can issue a rotation event which rotates out the comprimised witness and replaces them with a new one.
+  This avoids the need for witnesses having witnesses, and an infinite recursion problem.
+  It also aligns with KERI's design to be minimally sufficient.
+</Callout>
+
+The most basic function of witnesses is ensure there is a high availibity layer to distribute your KEL updates to.
+This helps protect controllers so verifiers get access to the most up to date version of the key state of an identifier.
+
+On the other hand, a controller could be malicious themselves and attempt to show different forked versions of a KEL to different verifiers, which in KERI is called duplicity.
+Watchers are components which track KEL updates for identifiers on the network, and can help detect key compromise or duplicity.
+Watchers should "share notes" with each other to spot for inconsistencies and broadcast issues.
+
+All in all, this ensures KEL updates are distributed across the network as quickly as possible and aims to prevent eclipse attacks.
+
+<Callout type="info">
+  Witnesses can be configured with 2-factor authentication to prevent an attacker who steals your rotation keys (which should be hard already!) from creating a fully witnessed rotation event.
+  However, given the possibility of a legitimate controller losing access to all witnesses, the entire witness set may be changed in a rotation event.
+
+  To ensure the 2-factor authentication is still useful, it's on the roadmap to ensure watchers are suspicious when a controller suddenly changes many witnesses to give the legitimate controller time to react.
+</Callout>
+
+Watcher integration with KERIA is still pending.
