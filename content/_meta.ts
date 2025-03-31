@@ -30,6 +30,7 @@ export default {
     type: "separator",
     title: "Infrastructure",
   },
+  infra: "Overview",
   sandbox: "Hosted Sandbox",
   selfdeployment: "Self Deployment",
   ____: {

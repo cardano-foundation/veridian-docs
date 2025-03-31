@@ -17,7 +17,8 @@ It's possible to create a non-transferable identifier using a Key Event Log too,
   This [Github discussion](https://github.com/WebOfTrust/keripy/discussions/612) is a good reference for the CESR 2.0 codes.
 </Callout>
 
-**Transferable:** Identifiers that are meant to be long-lived and represent a person, entity or machine should use a transferable identifier which can be rotated.
+**Transferable:** Identifiers that are meant to be long-lived and represent a person, entity or machine should be transferable, which means they can be rotated.
+
 At any given time, transferable identifier contains 2 sets of keys:
 - Current signing key set
 - Rotation key set
@@ -60,7 +61,7 @@ However, keys used to sign anything become exposed over time, whether through th
 Once the key is lost, the identifier is lost.
 
 KERI separates signing keys and rotation keys to ensure that a compromise of signing keys does not result in a lost identifier.
-A rotation event for an identifier is only valid if signed using the rotation keys, which were commited to in the previous establishment event.
+A rotation event for an identifier is only valid if signed using the rotation keys, which were committed to in the previous establishment event.
 
 For each rotation event, it must be signed by a threshold number of rotation keys.
 The rotation threshold can be different to the current signing threshold.
@@ -84,12 +85,12 @@ There is also a threshold for witness signatures, and a rotation event can chang
 
 <Callout type="info">
   Another use for non-transferable identifiers are witnesses.
-  A witness identifier isn't necessarily meant to be ephemeral, but in case a witness is compromised, any identifiers using that witness can issue a rotation event which rotates out the comprimised witness and replaces them with a new one.
+  A witness identifier isn't necessarily meant to be ephemeral, but in case a witness is compromised, any identifiers using that witness can issue a rotation event which rotates out the compromised witness and replaces them with a new one.
   This avoids the need for witnesses having witnesses, and an infinite recursion problem.
   It also aligns with KERI's design to be minimally sufficient.
 </Callout>
 
-The most basic function of witnesses is ensure there is a high availibity layer to distribute your KEL updates to.
+The most basic function of witnesses is to ensure there is a high availability layer to distribute your KEL updates to.
 This helps protect controllers so verifiers get access to the most up to date version of the key state of an identifier.
 
 On the other hand, a controller could be malicious themselves and attempt to show different forked versions of a KEL to different verifiers, which in KERI is called duplicity.
