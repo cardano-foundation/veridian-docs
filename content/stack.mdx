@@ -21,7 +21,7 @@ The actual keys of an edge client's identifiers never leave the edge, at least n
 We recommend this approach as it abstracts away many of the lower level complexities and provides a more simple, higher level Signify API.
 It also means that you can deploy a zero trust network architecture across your services in a more lightweight and approachable way.
 
-KERIA runs on three separate ports - by default 3901, 3902 and 3903:
+KERIA runs on three separate ports — by default 3901, 3902 and 3903:
 - **3901:** This is the **connect** port and is used by Signify clients to interact with the KERIA API to do things such as creating an identifier, or issuing an ACDC.
 It must be accessible by any edge clients.
 - **3902:** This port must be open to every other KERI agent you want to interact with, so this is typically publicly accessible.
