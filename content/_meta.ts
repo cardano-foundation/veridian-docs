@@ -30,13 +30,38 @@ export default {
     type: "separator",
     title: "Infrastructure",
   },
+  infra: "Overview",
   sandbox: "Hosted Sandbox",
   selfdeployment: "Self Deployment",
   ____: {
     type: "separator",
     title: "Developer Guide",
   },
-  devs: "Introduction",
+  dev: "Introduction",
+  protocols: {
+    title: "Protocols",
+    theme: {
+      collapsed: true,
+    },
+  },
+  stack: {
+    title: "Getting Started",
+    theme: {
+      collapsed: true,
+    },
+  },
+  foundations: {
+    title: "Foundations",
+    theme: {
+      collapsed: true,
+    },
+  },
+  apis: {
+    title: "User APIs",
+    theme: {
+      collapsed: true,
+    },
+  },
   _____: {
     type: "separator",
     title: "More",

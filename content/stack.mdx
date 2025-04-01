@@ -1,0 +1,100 @@
+import { Callout } from "nextra/components";
+
+# Getting Started
+
+There are various implementations of KERI out there, and the reference implementation is called [keripy](https://github.com/WebOfTrust/keripy).
+keripy implements KERI, ACDC and CESR at a low level, along with some helper functionality and a cli tool called the kli.
+One could take keripy as-is and integrate it into any Python backend directly, but we don't recommend this unless you are very familiar with the implementation.
+
+## KERIA & Signify
+
+[KERIA](https://github.com/WebOfTrust/keria) is a multi-agent cloud service that is based on keripy, designed to service edge clients.
+Edge clients can use a library called Signify to interact with KERIA securely, and there are implementations in [TypeScript](https://github.com/WebOfTrust/signify-ts) and [Python](https://github.com/WebOfTrust/signifypy), with a Java library coming soon.
+KERIA only serves as infrastructure to help edge agents interact with others, securely store data and in general lighten the load at the edge.
+The actual keys of an edge client's identifiers never leave the edge, at least not unencrypted.
+
+<Callout type="info">
+  A Self Sovereign Identity agent is a service or application that is capable of understanding an identity protocol.
+  You might have an agent on your mobile device which acts as your wallet, or an agent in the cloud which is authenticating users. 
+</Callout>
+
+We recommend this approach as it abstracts away many of the lower level complexities and provides a more simple, higher level Signify API.
+It also means that you can deploy a zero trust network architecture across your services in a more lightweight and approachable way.
+
+KERIA runs on three separate ports - by default 3901, 3902 and 3903:
+- **3901:** This is the **connect** port and is used by Signify clients to interact with the KERIA API to do things such as creating an identifier, or issuing an ACDC.
+It must be accessible by any edge clients.
+- **3902:** This port must be open to every other KERI agent you want to interact with, so this is typically publicly accessible.
+- **3903:** This is the **boot** port, and is used to onboard or bootstrap a new edge agent into the KERIA instance.
+This should not be publicly accessible, and your business logic can determine how to give access to an edge client.
+In our sandboxes, we share one-time use URLs by email for example.
+
+Take a look at our [infrastructure](../infra) guide to get access to a KERIA instance!
+
+<Callout type="warning">
+  In general, we contribute any changes to keripy, KERIA or Signify back to the WebOfTrust community and don't sit on forks.
+  However, at the time of writing we are on forks as we're in the process of contributing large features such as ESSR back.
+
+  This Signify-TS [branch](https://github.com/cardano-foundation/signify-ts/tree/build/v1) should be used to interact with the KERIA infrastructure we deploy.
+  If the branch no longer exists, chances are we are back on `WebOfTrust/main` and need to remove this warning!
+</Callout>
+
+### Key Management & Booting
+
+KERI as a protocol only cares about key pairs and signatures, and does not enforce how or where one stores their keys.
+Out of the box, Signify offers different [options](https://github.com/WebOfTrust/keria/blob/main/docs/protocol.md#key-generate-methods) with a default of Salty Keys.
+Our mobile wallet uses Salty Keys, but in the longer term we plan on moving to HSM Keys.
+
+A Signify client is initialized using a 21 character CESR seed.
+This seed is used to generate public-private key pairs deterministically, and the keys are used to secure the communication with KERIA and encrypt any cryptographic key material we may want to store on KERIA.
+In the implementation and tests, this seed is often referred to as the bran or passcode.
+
+```ts showLineNumbers
+import { SignifyClient, ready } from "signify-ts";
+
+await ready();
+const client = new SignifyClient(
+  config.keria.url,
+  randomPasscode(),
+  Tier.low,
+  config.keria.bootUrl
+);
+
+await client.boot();
+```
+
+Line 3 is used to initialize libsodium, so must be called when starting up your application.
+The seed or passcode is generated on line 6, so this should be stored securely.
+In our wallet, we encode the passcode using BIP-39 for the user to write down.
+
+When we call boot, a KERI identifier is generated which is used to secure the communication with KERIA.
+The KEL of the identifier will be sent to KERIA, and in response KERIA will bootstrap a cloud agent.
+The cloud agent will have its own KERI identifier, and set of databases which are separate from all other agents.
+
+The set of edge and cloud identifiers form a KERI delegation relationship in this boot phase, so there is a one to one mapping.
+The cloud agent will only accept API requests signed by the edge identifier, and the edge identifier will only accept API responses from the cloud identifier.
+
+<Callout type="info">
+  The KERIA-Signify API is also fully encrypted using a technique called Encrypt Sender and Sign Receiver, which provides incredibly robust security.
+  It is detailed in the [SPAC](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/SPAC_Message.md#best-combined-authenticity-and-confidentiality) paper, and forms the base of the [Trust Spanning Protocol](https://trustoverip.github.io/tswg-tsp-specification/) at Trust over IP.
+</Callout>
+
+At this point, there will be a KERI agent in the cloud which the edge client can interact with, and which serves as mailbox for receiving messages and requests from other KERI agents or services.
+
+### Connecting
+
+Directly after booting for the first time, or any time we wish to re-initialize a Signify client for an existing cloud agent, we can call the connect function.
+
+```ts showLineNumbers
+import { SignifyClient, ready } from "signify-ts";
+
+...
+
+await client.connect();
+```
+
+Signify itself is stateless, so this passcode must be passed to it each time you want to re-connect to your cloud agent.
+This connect call with initialize the Signify client by fetching the KEL of the cloud identifier, and some other counter information.
+It will verify the delegation relationship with the identifier which can be created from the passcode.
+
+At this point, you are ready to do whatever you need to satisfy your business logic!

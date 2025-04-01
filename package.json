@@ -1,9 +1,9 @@
 {
-  "name": "cf-identity-wallet-documentation",
+  "name": "veridian-docs",
   "description": "Cardano Foundation Identity Wallet Documentation",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cardano-foundation/cf-identity-wallet-documentation.git"
+    "url": "https://github.com/cardano-foundation/veridian-docs.git"
   },
   "scripts": {
     "dev": "next",
