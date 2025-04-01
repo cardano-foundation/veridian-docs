@@ -1,0 +1,67 @@
+import { Callout } from "nextra/components";
+import { Steps } from "nextra/components";
+
+# Onboarding
+
+The onboarding process is your first step towards using the Veridian Wallet and managing your digital identity with ease.
+You can either set up a new wallet or [recover](../recovery) an existing one from a previous installation.
+
+## Infrastructure
+Our wallet leverages cloud infrastructure for performance, high availability and recoverability.
+Please check out our [infrastructure guide](../infra) for more information; you will need access to a cloud agent before onboarding your wallet.
+
+## Wallet setup
+
+For new users, please follow these steps; we've also attached a video at the bottom of the page!
+
+<Steps>
+### Install and launch the app
+Install the app from the [App Store](https://apps.apple.com/app6590628073) or [Play Store](https://play.google.com/store/apps/details?id=org.cardanofoundation.idw), and launch the Veridian Wallet!
+Once loaded, you can click `Get started`.
+ 
+### Create a passcode
+Choose a secure passcode.
+This passcode will be used to access the app and may be used to perform critical functions within the app.
+
+If your phone supports it, you will be asked to optionally set up biometrics too!
+For now, biometrics are only used for login.
+
+<Callout type="warning">
+  We only support "secure" biometrics, so you may not see the biometric prompts on your device.
+
+  In Android, face ID is not considered secure and even some fingerprint scanners have been deemed insecure.
+</Callout>
+
+### Create an operations password (optional!)
+The operations password is a more secure alternative to the passcode.
+Once enabled, you will need to use it instead of the passcode for operations when the app is unlocked.
+
+The passcode or biometrics will still be used to unlock the app.
+
+### Generate your recovery phrase
+The app will display an 18-word recovery phrase — write it down and store it in a secure location.
+
+For technical readers, the recovery phrase is a BIP-39 conversion of a salt in the KERI ecosystem, which is different from Cardano crypto wallets.
+These salts are not quite the right length for BIP-39, so they have been padded with zeros to convert to 18 words.
+You might notice `abandon` appears often towards the end of generated recovery phrases, but don't worry — this padding is not used for cryptographic functions.
+
+<Callout type="warning">
+  Right now, this recovery phrase is the only way to restore your wallet if your device is lost or reset.
+  Going forward, we will be exploring how to use multi-sig identifiers for multi-device and social-recovery.
+  And don't worry, your existing identifiers will be migratable from the recovery phrase.
+</Callout>
+
+After accepting the terms of use, you will be asked to verify the order of the words to ensure you copied it correctly.
+
+### SSI agent details
+Enter your Boot and Connect URLs.
+Where these are found depends on your infrastructure deployment; for example, sandbox users will receive an email to bootstrap their wallet to the cloud agent.
+
+### Complete
+Finally, you can set your display name.
+Please note that this will be shared when connecting with other wallets and services.
+
+Now you’re ready to explore the wallet’s features.
+</Steps>
+
+<video src="/videos/Onboarding.mov" type="video/mp4" controls />

@@ -12,7 +12,7 @@ For now, we'll just give a brief overview, and hope to expand these sections in 
 These protocols have been developed from the ground up with a first principles approach, which can lead to being exposed to overwhelming, low level details.
 In actuality, these protocols are much less complex than meets the eye, and follow a minimally sufficient design approach.
 
-It's all about getting the right abstraction level - dApp developers in Cardano learn the eUTXO model, but they needn't learn the inner complexities of the Ouroboros consensus algorithm.
+It's all about getting the right abstraction level — dApp developers in Cardano learn the eUTXO model, but they needn't learn the inner complexities of the Ouroboros consensus algorithm.
 
 ## Key Event Receipt Infrastructure
 Many developers, particularly from blockchain backgrounds will be well accustomed to the concept of asymmetric cryptography and digital signatures.
@@ -25,7 +25,7 @@ In traditional systems, a key rotation results in a new identifier, and possibly
 
 KERI is a decentralized identifier protocol and infrastructure intended to solve the key management problem.
 It allows you to control an identifier which can be maintained as keys are rotated; no matter how many times you rotate keys, you keep your identifier.
-This simplifies application flows, improving UX and security - if a user is compromised, they can recover and your application or dApp needn't do anything!
+This simplifies application flows, improving UX and security — if a user is compromised, they can recover and your application or dApp needn't do anything!
 
 It provides enterprise grade security with post-quantum secure identifiers, weighted threshold multi-sig, delegation and more.
 As a protocol, KERI is concerned with securely maintaining your identifiers even in the face of compromise or attack.
@@ -36,7 +36,7 @@ While KERI provides a way to securely relate signatures to an identifier, ACDCs 
 Currently, the most prominent use of ACDCs is to represent Verifiable Credentials in the KERI ecosystem.
 
 An ACDC is a data container that is issued by a KERI identifier.
-In KERI, there is a strong binding between which keys were used to issue which ACDCs, despite key rotations - more on that [later](./protocols/acdcs#kel-anchoring).
+In KERI, there is a strong binding between which keys were used to issue which ACDCs, despite key rotations — more on that [later](./protocols/acdcs#kel-anchoring).
 The lack of this binding in other ecosystems leads to complications such as a issuer key rotation effectively breaking the validation of all previously issued credentials.
 
 The schema or format of the data container is referenced within the ACDC as a [SAID](https://trustoverip.github.io/tswg-cesr-specification/#self-addressing-identifier-said), which prevents security issues prevalent in other Verifiable Credential protocols that rely on web-hosted JSON schema URLs.
@@ -49,10 +49,10 @@ The schema or format of the data container is referenced within the ACDC as a [S
 
 ACDCs can be targeted or untargeted:
 - Targeted ACDCs have an issuee (holder) field, and as such represent Verifiable Credentials.
-- Untargeted ACDCs do not, so they can be viewed more as Verifiable Statements - to whom it may concern. An IoT device reporting on its sensor data would be a good example.
+- Untargeted ACDCs do not, so they can be viewed more as Verifiable Statements — to whom it may concern. An IoT device reporting on its sensor data would be a good example.
 
 Finally, perhaps the most interesting aspect of ACDCs is that they can be chained together to represent complex relationships.
-An individual ACDC can effectively be a node in a property graph with well-defined edges, weights and rules on those edges - all defined in the schemas.
+An individual ACDC can effectively be a node in a property graph with well-defined edges, weights and rules on those edges — all defined in the schemas.
 This is incredibly powerful and allows us to represent trust chains and data provenance with extreme precision, safely protected by KERI.
 
 ## Composable Event Streaming Representation
@@ -70,7 +70,7 @@ In CESR:
 - Cryptographic primitives such as keys and hashes are first class citizens which avoids issues like deciding on how to encode a public key.
 
 Fields are insertion-ordered which avoids the need for insecure canonicalization schemes.
-The order of the fields should be defined in the data structure's ecosystem - for example, KERI has a well-defined top-level field order for KERI events.
+The order of the fields should be defined in the data structure's ecosystem — for example, KERI has a well-defined top-level field order for KERI events.
 
 Finally, everything in KERI and ACDC is identified using SAIDs, whether it be schemas, or nodes in an ACDC property graph.
 This allows clients to securely cache data and greatly contributes to the system scalability.
