@@ -21,11 +21,13 @@ Given a public-private key pair and some data, a digital signature can be used t
 These attestations are very useful and form the basis of web and blockchain security.
 The identifier in this case is the public key.
 However, this is problematic when you consider that private keys can get compromised over time, and in general become more vulnerable the more they are used.
-A key rotation results in a new identifier, and possibly clunky attempts to relate the old identifier to the new one.
+In traditional systems, a key rotation results in a new identifier, and possibly clunky attempts to relate the old identifier to the new one.
 
 KERI is a decentralized identifier protocol and infrastructure intended to solve the key management problem.
-It allows you to control an identifier which can be maintained as keys are rotated, and provides enterprise grade security with post-quantum secure identifiers, weighted threshold multi-sig, delegation and more.
+It allows you to control an identifier which can be maintained as keys are rotated; no matter how many times you rotate keys, you keep your identifier.
+This simplifies application flows, improving UX and security - if a user is compromised, they can recover and your application or dApp needn't do anything!
 
+It provides enterprise grade security with post-quantum secure identifiers, weighted threshold multi-sig, delegation and more.
 As a protocol, KERI is concerned with securely maintaining your identifiers even in the face of compromise or attack.
 It's very clever!
 
@@ -50,7 +52,7 @@ ACDCs can be targeted or untargeted:
 - Untargeted ACDCs do not, so they can be viewed more as Verifiable Statements - to whom it may concern. An IoT device reporting on its sensor data would be a good example.
 
 Finally, perhaps the most interesting aspect of ACDCs is that they can be chained together to represent complex relationships.
-An individual ACDC can effectively be a node in a property graph with well defined edges, weights and rules on those edges - all defined in the schemas.
+An individual ACDC can effectively be a node in a property graph with well-defined edges, weights and rules on those edges - all defined in the schemas.
 This is incredibly powerful and allows us to represent trust chains and data provenance with extreme precision, safely protected by KERI.
 
 ## Composable Event Streaming Representation

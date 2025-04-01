@@ -13,9 +13,8 @@ As such, it's quite important to be able to rotate keys and recover from any key
 In addition, you may use a number of ephemeral identifiers to help protect your privacy from bystanders.
 
 <Callout type="info">
-  We use the [Key Event Receipt
-  Infrastructure](https://trustoverip.github.io/tswg-keri-specification/) (KERI)
-  standard for managing identifiers and keys.
+  We use the [Key Event Receipt Infrastructure](https://trustoverip.github.io/tswg-keri-specification/) (KERI) standard for managing identifiers and keys.
+  Developers should refer to our [protocol guides](../protocols) for more information.
 </Callout>
 
 ## Identifier types
@@ -26,7 +25,7 @@ Here you can create, rotate and delete identifiers.
 When creating an identifier you may select Individual or Group.
 Individual identifiers represent you as a person whereas group is designed to represent an entity.
 
-For now, individual identifiers are single-signature identifiers which means there is one key pair to sign statements, and one key pair to rotate keys.
+For now, individual identifiers are single-signature identifiers which means there is one key pair to sign attestations, and one key pair to rotate keys.
 We hope to expand this in the future to support multi-device recovery and social recovery.
 
 Group identifiers are of course already multi-signature.
@@ -34,17 +33,17 @@ Each member of the group controls one of the signing keys and one of the rotatio
 A threshold can be set to decide how many members of a group are required to sign or rotate.
 
 <Callout type="info">
-  Multi-signature identifiers in theory can be customised much further.
+  Multi-signature identifiers in theory can be customized much further.
   Each member's signature can be weighted, and the threshold and weights can be different for signing and rotation.
   In fact, you could even have different members who can sign and who can rotate.
 
-For now, we're starting out simple to not overcomplicate the user experience!
+  For now, we're starting out simple to not overcomplicate the user experience!
 </Callout>
 
 ## Rotating keys
 
 In general it's a good practice to rotate keys over time.
-The more data you sign with a key, the more exposed it gets.
+The more data you sign with a key, the more exposed it gets, either through its environment or cryptanalysis.
 
 In the case of a group identifier, rotating also allows you to change which members are in the group - however, this is a work in progress and not supported yet!
 In the future, rotation will also enable individual identifiers to be recovered with multi-device and social recovery.
@@ -56,9 +55,8 @@ This is why we are so keen on being ready for any potential key compromise or de
 ## Delegated identifiers
 
 Single or multi-signature identifiers may also be delegated.
-Delegation in KERI is known as co-operative delegation and is used in enterprise to help in top-down hierarchical recovery.
-In a nutshell, a delegator must give a signed approval of the creation of a delegatee identifier and any key rotations.
-The delegator may also be changed.
+Delegation in KERI is known as co-operative delegation and can be used in enterprise for top-down hierarchical identifier recovery.
+It also has other scalability benefits, for those who are interested in the various types of KERI developer, please check out [this section](../protocols/delegation) of our developer docs.
 
 There are some advanced features of recovery that are enabled by delegated identifiers, but we think it would be a little too much for this documentation.
-Delegated identifiers aren't supported in the wallet yet, but is indeed planned!
+Delegated identifiers aren't supported in the wallet yet but are indeed planned!
