@@ -3,40 +3,45 @@ import { Callout } from "nextra/components";
 # Connections
 
 Identifiers alone aren't very useful!
-Connections allow us to talk to other wallets and services using the same identity standards.
+Connections allow us to talk to other wallets and services using the same identity protocols.
 
 Any identifier you create in the wallet can be shared with others by way of QR code, which is effectively an endpoint on your cloud agent.
-For technical folk, this is known as an [Out of Band Introduction](https://trustoverip.github.io/tswg-keri-specification/#out-of-band-introduction-oobi) and is a way to bootstrap a secure connection with an identifier.
+For technical folk, this is known as an [Out of Band Introduction](https://trustoverip.github.io/tswg-keri-specification/#out-of-band-introduction-oobi) (OOBI) and is a way to bootstrap a secure connection with an identifier.
+
+<Callout type="info">
+  For developers, please check out our section on [OOBIs](../foundations/oobis).
+</Callout>
 
 ## How to connect
 
 You can connect to another wallet or service by scanning their connection QR code.
-If the connection cannot be established right away, it will be pending and eventually complete in the background.
+If the connection cannot be established right away, it will be pending and will eventually complete in the background.
 If not, you can always delete the pending connection.
 
 Likewise, you must share your QR code with the other party so they can connect with you.
-We're working on improving the user experience here by having a more interactive connection flow.
+We're working on improving the user experience here by having a more interactive connection flow - this is coming _very_ soon!
 
-<Callout type="info" emoji="ℹ️">
+<Callout type="info">
   We mentioned in the previous section that you may also create a number of ephemeral identifiers to protect your privacy more.
   This is currently not yet supported, so you will always be sharing a direct connection to another party.
 
-Our hope is to support the [Trust Spanning Protocol](https://trustoverip.github.io/tswg-tsp-specification/) for this purpose.
-
+  Our hope is to support the [Trust Spanning Protocol](https://trustoverip.github.io/tswg-tsp-specification/) for this purpose.
 </Callout>
+
+Once connected, all communications will be end-to-end encrypted with incredibly robust security using a technique called Encrypt Sender and Sign Receiver.
+This provides particular security advantages over other protocols like DIDComm; technical folk can read me [here](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/SPAC_Message.md#best-combined-authenticity-and-confidentiality).
 
 ## History and notes
 
 Within the details of a connection you will find a history of interactions.
-This can include activities such as being issued a credential from that connection.
+This can include activities such as being issued a credential, or receiving a request to present one.
 
 You can also add some notes to the connection.
 These are completely personal and are never shared with the other party.
 
-<Callout type="warning" emoji="⚠️">
-  #Animation 5: Establish connection via OOBI scan
-</Callout>
+## Unknown connections
 
-<Callout type="warning" emoji="⚠️">
-  #Animation 6: See Connection history
-</Callout>
+Sometimes you might receive a notification from an unknown connection, or from a previously deleted connection.
+You won't be able to action on these notifications until you add, or re-add the connection.
+We believe on providing as much feedback as possible to the user in case they forget to complete the connection flow.
+For spam prevention, we will likely block these from appearing once we have the interactive connection flow developed!
