@@ -12,7 +12,7 @@ As such, it's quite important to be able to rotate keys and recover from any key
 
 In addition, you may use a number of ephemeral identifiers to help protect your privacy from bystanders.
 
-<Callout type="info" emoji="ℹ️">
+<Callout type="info">
   We use the [Key Event Receipt
   Infrastructure](https://trustoverip.github.io/tswg-keri-specification/) (KERI)
   standard for managing identifiers and keys.
@@ -33,19 +33,13 @@ Group identifiers are of course already multi-signature.
 Each member of the group controls one of the signing keys and one of the rotation keys.
 A threshold can be set to decide how many members of a group are required to sign or rotate.
 
-<Callout type="info" emoji="ℹ️">
+<Callout type="info">
   Multi-signature identifiers in theory can be customised much further.
   Each member's signature can be weighted, and the threshold and weights can be different for signing and rotation.
   In fact, you could even have different members who can sign and who can rotate.
 
 For now, we're starting out simple to not overcomplicate the user experience!
 </Callout>
-
-### Create a Single Identifier
-<video src="/videos/CreateIdentifier.mov" type="video/mp4" controls />
-
-### Delete a Single Identifier
-<video src="/videos/DeleteIdentifier.mov" type="video/mp4" controls />
 
 ## Rotating keys
 
@@ -59,9 +53,6 @@ The ultimate goal is to keep your identifiers for life.
 That way you can always prove who you are, and your reputation can be built up and end up carrying a lot of weight.
 This is why we are so keen on being ready for any potential key compromise or device loss.
 
-### Rotate Key of a Single Identifier
-<video src="/videos/RotateIdentifierKey.mov" type="video/mp4" controls />
-
 ## Delegated identifiers
 
 Single or multi-signature identifiers may also be delegated.
@@ -72,9 +63,6 @@ The delegator may also be changed.
 There are some advanced features of recovery that are enabled by delegated identifiers, but we think it would be a little too much for this documentation.
 Delegated identifiers aren't supported in the wallet yet, but is indeed planned!
 
-## Multi-Signature Identifiers with Threshold
+## Group Identifiers with Threshold
 
 Group identifiers are multi-signature by design. Each member of the group controls one of the signing keys and one of the rotation keys. A threshold can be set to decide how many members of a group are required to sign or rotate.
-
-### Create a Multi-Signature Identifier with Threshold
-<video src="/videos/CreateGroupIdentifier.mov" type="video/mp4" controls />
