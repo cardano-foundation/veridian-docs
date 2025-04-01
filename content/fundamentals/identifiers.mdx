@@ -39,8 +39,13 @@ A threshold can be set to decide how many members of a group are required to sig
   In fact, you could even have different members who can sign and who can rotate.
 
 For now, we're starting out simple to not overcomplicate the user experience!
-
 </Callout>
+
+### Create a Single Identifier
+<video src="/videos/CreateIdentifier.mov" type="video/mp4" controls />
+
+### Delete a Single Identifier
+<video src="/videos/DeleteIdentifier.mov" type="video/mp4" controls />
 
 ## Rotating keys
 
@@ -50,9 +55,12 @@ The more data you sign with a key, the more exposed it gets.
 In the case of a group identifier, rotating also allows you to change which members are in the group - however, this is a work in progress and not supported yet!
 In the future, rotation will also enable individual identifiers to be recovered with multi-device and social recovery.
 
-The ultimate goal is to keep your idnetifiers for life.
+The ultimate goal is to keep your identifiers for life.
 That way you can always prove who you are, and your reputation can be built up and end up carrying a lot of weight.
 This is why we are so keen on being ready for any potential key compromise or device loss.
+
+### Rotate Key of a Single Identifier
+<video src="/videos/RotateIdentifierKey.mov" type="video/mp4" controls />
 
 ## Delegated identifiers
 
@@ -64,14 +72,9 @@ The delegator may also be changed.
 There are some advanced features of recovery that are enabled by delegated identifiers, but we think it would be a little too much for this documentation.
 Delegated identifiers aren't supported in the wallet yet, but is indeed planned!
 
-<Callout type="warning" emoji="⚠️">
-  #Animation 3: Create single identifier. Rotate key of single identifier
-</Callout>
+## Multi-Signature Identifiers with Threshold
 
-<Callout type="warning" emoji="⚠️">
-  #Animation 4: Create multi-sig identifier with threshold
-</Callout>
+Group identifiers are multi-signature by design. Each member of the group controls one of the signing keys and one of the rotation keys. A threshold can be set to decide how many members of a group are required to sign or rotate.
 
-<Callout type="warning" emoji="⚠️">
-  #Animation 5: Delete a single identifier
-</Callout>
+### Create a Multi-Signature Identifier with Threshold
+<video src="/videos/CreateGroupIdentifier.mov" type="video/mp4" controls />
