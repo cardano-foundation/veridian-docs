@@ -14,11 +14,7 @@ export default {
       collapsed: true,
     },
   },
-  onboarding: {
-    theme: {
-      collapsed: true,
-    },
-  },
+  onboarding: "",
   userFlows: {
     title: "User Flows",
     theme: {
