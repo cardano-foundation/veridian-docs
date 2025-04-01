@@ -1,0 +1,62 @@
+import { Callout } from "nextra/components";
+
+# Out of band introductions
+
+Let's imagine Alice and Bob both have an identity wallet installed on their mobile, and each is connected to a different KERIA service provider.
+Both parties might have already created an identifier and would like to start interacting with each other.
+Perhaps Alice is Bob's boss and needs to issue Bob a credential to access a restricted web page.
+
+KERI identifiers (at least, non-ephemeral ones) are a CESR digest (SAID) of the first event of the inception event, and could look something like `ED4KeyyTKFj-72B008OTGgDCrFo6y7B2B73kfyzu5Int`.
+This doesn't tell us very much to begin with.
+Primarily, we don't know which public keys or witnesses relate to this identifier, and we don't know the endpoint where an agent would accept messages for this identifier.
+
+This is a discovery problem, where the network is very decentralized with every controller managing its own keys, and deciding which endpoint to accept messages on.
+To help us, we have something known as an [out of band introduction](https://trustoverip.github.io/tswg-keri-specification/#out-of-band-introduction-oobi).
+
+Simply put, an OOBI URL is an endpoint which contains the relevant identifier within the URL, such as `https://keria-provider.com/oobi/ED4KeyyTKFj-72B008OTGgDCrFo6y7B2B73kfyzu5Int`.
+When the endpoint is called (with a GET request), some cryptographic material is returned, such as the KEL of the identifier.
+This allows another party to first verify that the digest of the inception event equals the identifier in the URL, and that any other events in the KEL verify based on KERI rules.
+
+There also needs to be some signed information to authorize the endpoint `https://keria-provider.com`; otherwise, any website could act as an OOBI endpoint for an identifier as KELs are public!
+In fact, all data at this endpoint is signed at rest using KERI's [BADA policy](https://trustoverip.github.io/tswg-keri-specification/#bada-best-available-data-acceptance-policy) which aligns with zero trust network architecture.
+
+## Endpoint roles
+
+OOBIs serve as a discovery mechanism for more than just the identifier itself.
+KERI has different roles which an identifier might play, such as `witness`, `watcher`, `agent`, etc.
+
+An identifier may authorize another identifier to act with a particular role on their behalf.
+For example, embedding witnesses in your Key Event Log is implicitly designating that a particular witness identifier can witness your events.
+
+Other roles must be explicitly authorized, and can be discovered at the OOBI endpoint.
+The most important role to consider as a user of the KERIA/Signify stack is the `agent` role.
+
+Signify is an edge library used to interact with your cloud agent on a KERIA server.
+It makes sense then to grant our KERIA agent identifier the `agent` role.
+Now, when others attempt to interact with you, they will send messages to the endpoint of your KERIA server.
+
+```ts showLineNumbers
+const result = await client.identifiers().addEndRole(prefix, "agent", client.agent!.pre);
+```
+
+The above snippet will sign an end role authorization for your KERIA agent identifier (`client.agent!.pre`), and it is signed using your identifier (`prefix`).
+
+<Callout type="info">
+  If the identifier is a group multi-sig identifier, it must be signed using a threshold (signing threshold) amount of group members.
+  In a group of 3, if each group member wants to authorise their respective KERIA agent, there would need to be 3 separate end role authorizations that are threshold signed, and added to the OOBI response.
+</Callout>
+
+## Location schemes
+
+You might now be wondering where the actual URL or endpoint is designated.
+As you might have guessed, it requires a signed message designating the endpoint!
+This time, it's signed by the identifier which is acting in the role.
+
+For example, the KERIA agent would sign a message containing its identifier `client.agent!.pre` and endpoint (e.g. `https://keria-provider.com`).
+KERIA does this automatically when any new agent is created, and the endpoint value is specified in the environment or configuration file passed on start-up.
+
+For most users of Signify, they won't need to worry about managing location schemes but the endpoints are available nonetheless.
+
+<Callout type="info">
+  The same rules for group multi-sig apply here, where if an identifier which has a role is a multi-sig identifier, a threshold number of signatures are required.
+</Callout>
