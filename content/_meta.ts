@@ -9,23 +9,23 @@ export default {
     title: "Wallet User Guide",
   },
   walletGuide: "Introduction",
-  onboarding: {
-    theme: {
-      collapsed: true,
-    },
-  },
   fundamentals: {
     theme: {
       collapsed: true,
     },
   },
-  recovery: "",
-  useFlows: {
-    title: "Use Flows",
+  onboarding: {
     theme: {
       collapsed: true,
     },
   },
+  userFlows: {
+    title: "User Flows",
+    theme: {
+      collapsed: true,
+    },
+  },
+  recovery: "",
   ___: {
     type: "separator",
     title: "Infrastructure",
