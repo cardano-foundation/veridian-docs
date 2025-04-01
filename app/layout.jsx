@@ -4,6 +4,7 @@ import { getPageMap } from "nextra/page-map";
 import { NavbarWithThemeLogo } from "../components/NavbarWithThemeLogo";
 import { DOCUMENTATION_GITHUB_REPO_URL } from "../utils/constants";
 import "nextra-theme-docs/style.css";
+import "../styles/main.css";
 
 export const metadata = {};
 
