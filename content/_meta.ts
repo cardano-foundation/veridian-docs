@@ -8,7 +8,7 @@ export default {
     type: "separator",
     title: "Wallet User Guide",
   },
-  walletGuide: "Introduction",
+  introduction: "Introduction",
   onboarding: {
     theme: {
       collapsed: true,
@@ -25,6 +25,9 @@ export default {
     theme: {
       collapsed: true,
     },
+  },
+  walletGuide: {
+    display: 'hidden'
   },
   ___: {
     type: "separator",
