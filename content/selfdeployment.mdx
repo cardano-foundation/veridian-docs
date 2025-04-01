@@ -1,0 +1,119 @@
+## Introduction
+
+We support two container-based methods in order to self-host the services needed to back Veridian wallet: a more traditional, single-host docker-compose installation and a more customizable for reliability and scalability using a helm chart to deploy to kubernetes.
+In any case, we try to make it as easy as simple to go from zero to orchestrating all the services and serving them behind HTTPS.
+
+## Common pre-requisites
+
+- You will need a registered DNS domain. We reference it as `PUBLIC_DOMAIN` but it's fine as long as it's reacheable from your wallet app and the server(s) you will be deploying to.
+  - At least theese DNS records under this domain that resolve to the cloud instance or load-balancer that will be serving the services:
+    - `cred-issuance`
+    - `cred-issuance-ui`
+    - `keria`
+    - `keria-boot`
+    - `keria-ext`
+    - `witness-0` to `witness-5` (6 records in total)
+- A cloud instance or k8s cluster with enough resources to run the services. We recommend -as very minimum- 4vCPU, 8GB of RAM and 20 GBs of storage to start with.
+
+## docker-compose guide
+
+### pre-requisites
+
+- docker and docker-compose installed
+- A cloud instance with a public IP address
+  - DNS records described above resolving to this IP address
+  - TCP ports 80 and 443 open
+- A valid email address for Let's Encrypt HTTPS certificates management (although they will be expedited automatically)
+
+### installation
+
+1. Clone the repository and enter the directory:
+```bash
+git clone https://github.com/cardano-foundation/veridian-wallet.git
+cd veridian-wallet
+```
+2. Copy the `.env.production-traefik` file to `.env.production`:
+```bash
+cp .env.production-traefik .env.production
+```
+3. Edit the `.env.production` file and set the `PUBLIC_DOMAIN` and `ACME_ADMIN_EMAIL` variables.
+4. Initialize witnesses' configuration:
+```bash
+docker compose \
+    --profile witness-init \
+    --env-file .env.production \
+    -f docker-compose.production-traefik.yaml \
+    up
+```
+5. Boot up witnesses:
+```bash
+docker compose \
+    --profile witness \
+    --env-file .env.production \
+    -f docker-compose.production-traefik.yaml \
+    up -d
+```
+6. Initialize keria's configuration by following these steps:
+
+6.1. Generate a fresh `KERIA_PASSCODE` and update the value in the `.env.production` file:
+```bash
+KERIA_PASSCODE=$(docker run -it --rm cardanofoundation/cf-keria-passcode-gen)
+sed -i "s/^KERIA_PASSCODE=.*/KERIA_PASSCODE=$KERIA_PASSCODE/" .env.production
+```
+6.2. Gather witnesses' OOBIs and check they all (0-5) look correct:
+```bash
+export KERIA_IURLS=$(INITIAL_PORT=5642; for wit in $(seq 0 5); do OOBI=$(docker compose -f docker-compose.production-traefik.yaml logs witness-$wit 2>/dev/null | grep Witness.wit | awk '{print $NF}'); echo http://witness-$wit:$(( INITIAL_PORT + wit ))/oobi/${OOBI}/controller?role=witness; done | xargs echo)
+echo $KERIA_IURLS
+```
+6.3. Setup keria's configuration:
+```bash
+docker compose \
+    --profile keria-init \
+    --env-file .env.production \
+    -f docker-compose.production-traefik.yaml \
+    up
+```
+7. Boot up the rest of the services:
+```bash
+docker compose \
+    --profile production \
+    --env-file .env.production \
+    -f docker-compose.production-traefik.yaml \
+    up -d
+```
+
+It may take a few minutes for the certificates to be issued and put in place, and for the services to be fully operational, but at this point you should be able to access the services at URLs like `https://cred-issuance-ui.$PUBLIC_DOMAIN`. 
+
+
+## helm guide
+
+### Pre-requisites
+
+- A kubernetes cluster with an ingress controller capable of handling TLS termination for the chosen `PUBLIC_DOMAIN`.
+- [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) installed
+  - `kubectl` configured to access the k8s cluster
+- [helm](https://helm.sh) installed 
+
+### Installation
+
+This guide will describe the installation using our provided installation script. It will make the installation process easier than manually applying the helm chart, but in case you want to do it manually, you can find the helm chart source and documentation [here](https://github.com/cardano-foundation/cf-helm-charts/tree/main/charts/cf-idw).
+
+1. **Download AND review the script**:
+   ```sh
+   curl -so /tmp/helm-install.sh https://raw.githubusercontent.com/cardano-foundation/cf-helm-charts/refs/heads/main/charts/cf-idw/helm-install.sh
+   ```
+
+2. **Execute the script** with the required environment variables:
+   ```sh
+   export NAMESPACE=cf-idw-services
+   export WITNESS_COUNT=6  # Number of witnesses to deploy
+   export PUBLIC_DOMAINS=3x4mpl3.com,example.com  # Comma-separated list of public domains where the deployment will be served from
+   bash /tmp/helm-install.sh
+   ```
+
+3. **Get the full list of URLs** if you already have an ingress controller managing SSL certificates:
+   ```sh
+   for host in $(kubectl get ingress -n ${NAMESPACE} -o jsonpath='{.items[*].spec.rules[*].host}'); do
+     echo https://$host
+   done | sort
+   ```
