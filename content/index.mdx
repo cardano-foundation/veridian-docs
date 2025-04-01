@@ -8,49 +8,51 @@ import { Cards } from "nextra/components";
 # Veridian Platform Overview
 
 Veridian is an open-source platform designed to support the verification needs of the future.
-Our approach enables scalable identity management, modular use of verifiable credentials, and strong security measures, including protection against threats such as quantum attacks.
+Our approach enables scalable identifier management and modular use of Verifiable Credentials with enterprise-grade security.
+This includes key compromise recovery and protection against threats such as quantum attacks.
 
-The platform consists of user-facing applications, backend services, and high-availability agents, offering complete composability for independent development. Additionally, an out-of-the-box sandbox environment is available for end-to-end experimentation and testing.
+The platform consists of user-facing applications, backend services, and high-availability cloud infrastructure, offering complete composability for independent development.
+Additionally, out-of-the-box sandbox environments are available on request for end-to-end experimentation and testing.
 
 ## Components
 
 ### Wallet
 
-The Veridian mobile wallet is a user-friendly, white-label solution for creating self-certifying identities and issuing credentials. Built on KERI, it supports unique features like multi-signature credential presentation, signing, and key rotation and recovery mechanisms.
+The Veridian mobile wallet is a user-friendly, white-label solution for managing Decentralized Identifiers and Verifiable Credentials on your device.
+Built on the KERI and ACDC identity protocols, we enable identity for both individuals and organizations, where security is at the heart of our design!
 
 ### Infrastructure
 
-Veridian’s infrastructure includes high-availability edge and cloud agents that facilitate credential issuance and verification. These components are designed for easy deployment, requiring no specialized encryption knowledge. Witness nodes further enhance security by ensuring data integrity and tamper resistance.
+Veridian's infrastructure includes high-availability cloud agents and KERI witnesses.
+These components are designed for easy deployment, requiring no specialized knowledge.
+Our goal is to lower the barrier to entry, and ensure deployments follow security best practices!
 
 ### Services
 
-For a verifiable and auditable record, Veridian enables signing of events on the blockchain, providing flexibility for interoperable credential tracking across different blockchain networks.
-
-The Veridian sandbox offers access to our credential management tool, enabling developers to simulate credential issuance and verification in a controlled environment.
+The Veridian sandboxes offer access to our Credential Management tooling, empowering organizations to bootstrap their use-cases effortlessly.
+Our tooling leverages Cardano's immutability for discovery and disaster recovery mechanisms, with verifiable smart contract integration coming soon!
 
 ## Get Started
 
 <Cards>
   <Cards.Card
-    title="Build on your KERI stack with our wallet"
-    href=""
+    title="Learn how to use our mobile wallet"
+    href="../walletGuide"
     arrow="true"
   />
   <Cards.Card
-    title="Set up Veridian infrastructure for a verifiable credential framework"
-    href=""
+    title="Learn how to get access to Veridian's sandbox infrastructure"
+    href="../sandbox"
     arrow="true"
   />
   <Cards.Card
-    title="Track credential events on an unrestricted decentralized ledger"
-    href=""
+    title="Spin up your own infrastructure with Docker or Kubernetes"
+    href="../selfdeployment"
     arrow="true"
   />
   <Cards.Card
-    title="Experiment with our sandbox and credential management tool"
-    href=""
+    title="Learn how to integrate KERI into your use cases"
+    href="../dev"
     arrow="true"
   />
 </Cards>
-
-Contact us to learn more about the sandbox and how to integrate Veridian into your stack.
