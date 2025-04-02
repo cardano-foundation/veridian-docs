@@ -1,0 +1,57 @@
+import { Callout, Steps } from "nextra/components";
+
+# Identifiers
+
+After completing the onboarding process, your next step is to create your first identifier.
+As we [touched on](../fundamentals/identifiers), you can create both Individual and Group identifiers, but for now we'll focus on Individual.
+
+If you'd like to use this identifier to connect to a Cardano dApp using the [Cardano Connect](./cardanoconnect) feature, you must use an Individual identifier at this time.
+Group identifier integration with dApps will be coming in the future.
+
+## Creation
+
+<Steps>
+### Begin identifier creation
+Navigate to the Identifiers tab (bottom-left) and press the `Add an identifier` button.
+You can alternatively press the plus button in the top right corner of the page.
+
+### Enter details
+Choose a name that helps you remember the identifier’s purpose and select a theme.
+Ensure you keep Individual selected as the identifier type.
+
+## Complete
+After creating the identifier, it will appear in the deck of identifiers.
+At first, it will be pending, but it should complete quite quickly.
+For those interested in KERI as a protocol, it will be pending until fully "witnessed".
+</Steps>
+
+You can now click on the card to access all the details of the identifier.
+From here, you can choose to update the name for your identifier from the details screen, or share your identifier to connect to other wallets and services.
+
+<video src="/videos/CreateIdentifier.mov" type="video/mp4" controls />
+
+## Key rotation
+
+Keys can be actively rotated for identifiers within the identifier details section.
+This helps keep your identifier secure in case your signing keys have been compromised.
+In the future, we aim to have advanced notification mechanisms to prompt when you should rotate, or even automatically do it for you.
+
+For now, you cannot rotate keys for a group identifier, but it's on the near-term roadmap.
+
+<video src="/videos/RotateIdentifierKey.mov" type="video/mp4" controls />
+
+## Deletion
+
+If you no longer require an identifier, you can choose to delete it.
+Recovery at this point is still technically possible, but it wouldn't be straight-forward and is not supported with our wallet currently.
+Please ensure you only delete identifiers that you will never need again!
+
+Deleting your identifier will delete any pending notifications related to that identifier.
+It won't delete any credentials, but you won't be able to present those credentials anymore.
+
+<Callout type="info">
+  In KERI, you can "abandon" an identifier by rotating to empty keys but we have not implemented this yet.
+  If implemented, deletion would mean your identifier is not recoverable, but also means that attackers can't impersonate you using your old, deleted identifiers.
+</Callout>
+
+<video src="/videos/DeleteIdentifier.mov" type="video/mp4" controls />
