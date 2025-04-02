@@ -1,0 +1,48 @@
+import { Callout, Steps } from "nextra/components";
+
+# Group creation
+
+Groups are represented with threshold multi-sig identifiers.
+The creation of a group identifier builds on the idea of connections, as all members will need a way to coordinate the creation and usage of the group identifier.
+Remember — there's no central platform for coordination!
+
+<Steps>
+### Initiator setup
+One member acts as the initiator of a group and creates a new identifier in the wallet using the Group identifier type.
+Once created, a connection QR code will appear which can be shared with the other future members of the desired group.
+
+### Member setup
+The initiator's QR code that was shown is slightly different than regular connection QR codes.
+Once scanned by other wallets, it will automatically bootstrap setting up the group identifier on their device.
+
+Any other people who would like to join the group should scan the initiator QR code now, and set up theirs.
+
+### Remaining QR exchanges
+Now, each group member will have their own QR code — initiator and non-initiators alike.
+The identifier will appear in the "For groups" section of the identifier list, and when opened, will it show a list of members below the QR code.
+This is effectively in a draft state until the initiator finalizes the setup.
+
+You will only be able to see members for which you have scanned QR codes, so you need to go ahead and scan everyone else's QR code.
+Each member must do this.
+
+<Callout type="info">
+  This first iteration of group creation was intended to be flexible and secure, but we are aware of the complexities in scanning so many QR codes.
+  It's quite easy for a group of 2, or maybe 3, but quickly gets harder.
+  
+  We have a design in place to implement that will drastically reduce the QR codes scanned, and use broadcasting under the hood to propagate the group member list.
+  However we do it, we want to keep security as a priority.
+</Callout>
+### Finalize setup
+Once all members are interconnected, the initiator can finalize the creation of the identifier from within the identifier details.
+At this point, the initiator can remove any undesired members and set a threshold.
+The threshold decides how many members need to provide a signature when using the identifier or rotating keys.
+
+### Accept
+Once finalized, a notification will be sent to all other members to accept the final configuration of the group.
+If they are happy, they can accept and the group identifier will be pending until a threshold amount of members accept.
+</Steps>
+
+Once the identifier is confirmed, you can view the identifier details like before.
+It will now show the various group members and thresholds.
+
+<video src="/videos/GroupIdentifier.mov" type="video/mp4" class="multi-device-video" controls />
