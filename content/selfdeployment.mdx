@@ -15,17 +15,17 @@ In any case, we try to make it as easy as simple to go from zero to orchestratin
     - `witness-0` to `witness-5` (6 records in total)
 - A cloud instance or k8s cluster with enough resources to run the services. We recommend -as very minimum- 4vCPU, 8GB of RAM and 20 GBs of storage to start with.
 
-## docker-compose guide
+## Docker-compose guide
 
-### pre-requisites
+### Pre-requisites
 
 - docker and docker-compose installed
 - A cloud instance with a public IP address
   - DNS records described above resolving to this IP address
   - TCP ports 80 and 443 open
-- A valid email address for Let's Encrypt HTTPS certificates management (although they will be expedited automatically)
+- A valid email address for Let's Encrypt HTTPS certificate management (although they will be expedited automatically)
 
-### installation
+### Installation
 
 1. Clone the repository and enter the directory:
 ```bash
@@ -85,7 +85,7 @@ docker compose \
 It may take a few minutes for the certificates to be issued and put in place, and for the services to be fully operational, but at this point you should be able to access the services at URLs like `https://cred-issuance-ui.$PUBLIC_DOMAIN`. 
 
 
-## helm guide
+## Helm guide
 
 ### Pre-requisites
 
