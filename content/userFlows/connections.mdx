@@ -1,0 +1,42 @@
+import { Callout, Steps } from "nextra/components";
+
+# Connections
+
+Connections can be used to interact with other wallets or services.
+We will use our Credential Issuance tooling that we've built to showcase connections.
+
+Our infrastructure deployments come loaded with this issuer tooling, so you should refer to those URLs.
+For development, we use this [URL](https://cred-issuance-ui.dev.idw-sandboxes.cf-deployments.org/) — however, it is not stable or intended for production!
+
+<Callout type="warning">
+  The Credential Issuance tooling is intended to aid development of the wallet, and empower quick integration of credentials into your use cases.
+  It's not yet a full fledged Credential Issuance tool that is ready for production deployments.
+  At some point in the future, it certainly will be!
+</Callout>
+
+<Steps>
+### Add the issuer connection
+In the issuer tool connections tab, you can select `Add Connection` to display a connection QR code.
+This QR code can be scanned using the main scanner (center tab button) of the wallet.
+After scanning, the wallet will be redirected to the connections page, and there should be new connection named "CF Credential Issuance".
+
+Within this connections page, there is another scanner which can also be used when clicking the plus icon.
+The connections page itself is accessible from the identifiers tab, credentials tab and main menu (right-most tab).
+
+### Share our identifier
+You will be ready to complete the connection if you've created [an identifier](./individualid).
+From within the identifier details, you can use the share button to view your connection QR code.
+
+Now, within the issuer tool, you can click the next button in the connect flow.
+From here you will have the choice of using your webcam to scan your phone, or pasting the connection URL.
+
+You are now ready to start interacting with that connection — in this case, you would be able to [receive credentials](./credentials).
+
+### View connection
+Within the connection, you can now view the history and notes.
+You are free to add any connection notes you'd like, they are never shared with the connection.
+For now, the history is generally populated from interactions involving credentials!
+</Steps>
+
+<video src="/videos/AddConnection.mov" type="video/mp4" controls />
+<video src="/videos/ConnectionHistoryNotes.mov" type="video/mp4" controls />
