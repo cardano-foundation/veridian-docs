@@ -1,11 +1,15 @@
-## Introduction
+# Introduction
 
-We support two container-based methods in order to self-host the services needed to back Veridian wallet: a more traditional, single-host docker-compose installation and a more customizable for reliability and scalability using a helm chart to deploy to kubernetes.
-In any case, we try to make it as easy and simple to go from zero to orchestrating all the services and serving them behind HTTPS to keep web2 compatibility, although obviously, the end-goal is to get rid of this need while enabling ToIP (Trust over IP) using KERI. 
+We support two container-based methods in order to self-host the services needed to back Veridian wallet:
+- A more traditional, single-host Docker Compose installation.
+- A more customizable one for reliability and scalability — using a Helm chart to deploy to Kubernetes.
+
+In any case, we try to make it as easy and simple to go from zero to orchestrating all the services and serving them behind HTTPS.
+This keeps Web2 compatibility, although of course, the end-goal is to get rid of this need while enabling ToIP (Trust over IP) using KERI. 
 
 ## Common pre-requisites
 
-- You will need a registered DNS domain. We reference it as `PUBLIC_DOMAIN` but it's fine as long as it's reachable from your wallet app and the server(s) you will be deploying to.
+- You will need a registered DNS domain. We reference it as `PUBLIC_DOMAIN` but it's OK as long as it's reachable from your wallet app and the server(s) you will be deploying to.
   - At least these DNS records under this domain that resolve to the cloud instance or load-balancer that will be serving the services:
     - `cred-issuance`
     - `cred-issuance-ui`
@@ -13,17 +17,17 @@ In any case, we try to make it as easy and simple to go from zero to orchestrati
     - `keria-boot`
     - `keria-ext`
     - `witness-0` to `witness-5` (6 records in total)
-- A cloud instance or k8s cluster with enough resources to run the services. We recommend -as very minimum- 4vCPU, 8GB of RAM and 20 GBs of storage to start with.
+- A cloud instance or k8s cluster with enough resources to run the services. We recommend _as very minimum_ 4vCPU, 8GB of RAM and 20GB of storage to start with.
 
-## Docker-compose guide
+## Docker Compose guide
 
 ### Pre-requisites
 
-- docker and docker-compose installed
-- A cloud instance with a public IP address
-  - DNS records described above resolving to this IP address
-  - TCP ports 80 and 443 open
-- A valid email address for Let's Encrypt HTTPS certificate management (although they will be expedited automatically)
+- Docker and Docker Compose installed.
+- A cloud instance with a public IP address.
+  - DNS records described above resolving to this IP address.
+  - TCP ports 80 and 443 open.
+- A valid email address for Let's Encrypt HTTPS certificate management (although they will be expedited automatically).
 
 ### Installation
 
@@ -53,26 +57,28 @@ docker compose \
     -f docker-compose.production-traefik.yaml \
     up -d
 ```
-6. Initialize keria's configuration by following these steps:
+6. Initialize KERIA's configuration by following these steps:
 
-6.1. Generate a fresh `KERIA_PASSCODE` and update the value in the `.env.production` file:
-```bash
-KERIA_PASSCODE=$(docker run -it --rm cardanofoundation/cf-keria-passcode-gen)
-sed -i "s/^KERIA_PASSCODE=.*/KERIA_PASSCODE=$KERIA_PASSCODE/" .env.production
-```
-6.2. Gather witnesses' OOBIs and check they all (0-5) look correct:
-```bash
-export KERIA_IURLS=$(INITIAL_PORT=5642; for wit in $(seq 0 5); do OOBI=$(docker compose -f docker-compose.production-traefik.yaml logs witness-$wit 2>/dev/null | grep Witness.wit | awk '{print $NF}'); echo http://witness-$wit:$(( INITIAL_PORT + wit ))/oobi/${OOBI}/controller?role=witness; done | xargs echo)
-echo $KERIA_IURLS
-```
-6.3. Setup keria's configuration:
-```bash
-docker compose \
-    --profile keria-init \
-    --env-file .env.production \
-    -f docker-compose.production-traefik.yaml \
-    up
-```
+    a. Generate a fresh `KERIA_PASSCODE` and update the value in the `.env.production` file:
+    ```bash
+    KERIA_PASSCODE=$(docker run -it --rm cardanofoundation/cf-keria-passcode-gen)
+    sed -i "s/^KERIA_PASSCODE=.*/KERIA_PASSCODE=$KERIA_PASSCODE/" .env.production
+    ```
+
+    b. Gather witnesses' OOBIs and check that they all (0-5) look correct:
+    ```bash
+    export KERIA_IURLS=$(INITIAL_PORT=5642; for wit in $(seq 0 5); do OOBI=$(docker compose -f docker-compose.production-traefik.yaml logs witness-$wit 2>/dev/null | grep Witness.wit | awk '{print $NF}'); echo http://witness-$wit:$(( INITIAL_PORT + wit ))/oobi/${OOBI}/controller?role=witness; done | xargs echo)
+    echo $KERIA_IURLS
+    ```
+
+    c. Setup KERIA's configuration:
+    ```bash
+    docker compose \
+        --profile keria-init \
+        --env-file .env.production \
+        -f docker-compose.production-traefik.yaml \
+        up
+    ```
 7. Boot up the rest of the services:
 ```bash
 docker compose \
@@ -89,14 +95,17 @@ It may take a few minutes for the certificates to be issued and put in place, an
 
 ### Pre-requisites
 
-- A kubernetes cluster with an ingress controller capable of handling TLS termination for the chosen `PUBLIC_DOMAIN`.
-- [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) installed
-  - `kubectl` configured to access the k8s cluster
-- [helm](https://helm.sh) installed 
+- A Kubernetes cluster with an ingress controller capable of handling TLS termination for the chosen `PUBLIC_DOMAIN`.
+- [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) installed.
+  - `kubectl` configured to access the k8s cluster.
+- [helm](https://helm.sh) installed.
 
 ### Installation
 
-This guide will describe the installation using our provided installation script. It will make the installation process easier than manually applying the helm chart, but in case you want to do it manually, you can find the helm chart source and documentation [here](https://github.com/cardano-foundation/cf-helm-charts/tree/main/charts/cf-idw).
+This guide will describe the installation using our provided installation script.
+It will make the installation process easier than manually applying the Helm chart!
+
+In case you want to do it manually, you can find the Helm chart source and documentation [here](https://github.com/cardano-foundation/cf-helm-charts/tree/main/charts/cf-idw).
 
 1. **Download AND review the script**:
    ```sh
