@@ -1,1 +1,22 @@
 # Overview
+
+We use an implementation of KERI that has a cloud and edge component.
+The SSI cloud agent, powered by [KERIA](https://github.com/WebOfTrust/keria) can be securely controlled by an edge agent, powered by the Signify library.
+We use this Signify library within our wallet — for now, we use the [TypeScript implementation](https://github.com/WebOfTrust/signify-ts).
+There is also a [Python implementation](https://github.com/WebOfTrust/signifypy), and a Java one is in the works at Veridian!
+
+Don't worry!
+The cloud agent cannot act on your behalf — your identity is securely controlled using your recovery phrase in the wallet, and this never leaves the device.
+The cloud agent helps other wallets or services communicate with you, and does some of the heavy computational lifting — it also serves as a backup data layer.
+
+There are also other components that contribute to the security of the network, such as KERI witnesses and watchers.
+All in all, we'd like to lower the barrier to entry for everyone, so that all you need is the wallet or edge library to get started, without needing to worry about maintaining a strong security posture for the cloud infrastructure.
+
+### Options
+
+If you'd like an effortless onboarding with an enterprise-grade deployment, [hosted sandboxes](./sandbox) are an option!
+
+Otherwise, you are free to spin up your [own infrastructure](./selfdeployment) using Docker Compose or Kubernetes.
+We've prepared all of the configurations, Helm charts and more to make this process as easy as possible!
+
+**Bonus:** All of our deployments come preloaded with our Credential Issuance tooling, and more!
