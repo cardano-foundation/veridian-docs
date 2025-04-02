@@ -1,0 +1,114 @@
+import { Steps, Callout } from "nextra/components";
+import Image from 'next/image'
+
+# Cardano Connect
+
+Cardano Connect is a feature of the Veridian Wallet that allows you to seamlessly connect with Cardano dApps using your wallet, leveraging the [CIP-45](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0045) standard.
+Currently, this feature supports only Individual identifiers, but we plan to extend support for Group identifiers in the future.
+
+To test Cardano Connect, you can visit our sample dApp at this link: [Cip45 Sample Dapp](https://cip45.dev.idw-sandboxes.cf-deployments.org/).
+
+Alternatively, you can run the dApp locally by following the instructions in [the project repository](https://github.com/cardano-foundation/veridian-wallet/tree/main/services/cip45-sample-dapp).
+
+<Callout type="info">
+  To use this feature, you'll need to have an Individual identifier created in
+  your wallet. For guidance on creating one, please refer to the [Identifiers
+  page](./individualid#creation).
+</Callout>
+
+## Connect to a dApp
+
+To connect your wallet to a dApp, follow these steps:
+
+<Steps>
+### Open the Cardano Connect Menu
+
+In the Veridian Wallet, open the menu and select `Cardano Connect.`
+
+<div className="gallery">
+    <Image src="/images/cardanoconnect/walletMenu.png" alt="Veridian Wallet Menu" width={300} height={300} />
+    <Image src="/images/cardanoconnect/cardanoConnectMenu.png" alt="Cardano Connect Menu" width={300} height={300} />
+</div>
+
+### Connect to the dApp
+
+Click the `Connect with Cardano` button, which will activate your camera. You’ll have two options to establish the connection:
+
+- Scan the QR code displayed in the dApp
+- Enter the Meerkat Address shown in the dApp
+
+Next, accept the CIP-45 connection request and choose the identifier you'd like to use for the connection.
+
+<div className="gallery">
+    <Image src="/images/cardanoconnect/connectionRequest.png" alt="Connection Request" width={300} height={300} />
+    <Image src="/images/cardanoconnect/selectIdentifier.png" alt="Select Identifier" width={300} height={300} />
+</div>
+
+The dApp will prompt you to approve the connection request from your wallet. Click on the Accept button to proceed.
+
+</Steps>
+
+## Sign messages
+
+Once connected to the dApp, you can sign messages using your wallet. To do this, follow the steps below:
+
+<Steps>
+### Interact with the dApp
+
+Depending on the dApp's functionality, you may be prompted to sign messages.
+When you're ready to take action, the dApp will ask you to sign the message.
+
+### Sign the message
+
+A `Sign` screen will appear in your wallet, showing the information that the dApp is requesting you to sign.
+Review the details and click the `Sign` button to proceed.
+
+<div className="gallery">
+    <Image src="/images/cardanoconnect/sign.png" alt="Sign Message" width={300} height={300} />
+</div>
+
+You will be prompted to enter your passcode or operations password to confirm the signing process.
+
+### Signing Completed
+
+Once signed, the dApp will display a confirmation message indicating that the signing was successful.
+
+</Steps>
+
+## Disconnect from the dApp
+
+Once you are done using the dApp, you can disconnect from it. To do this, follow these steps:
+
+<Steps>
+### Select Connection
+In the `Cardano Connect menu`, select the connection you want to disconnect from the `Connection History`.
+
+### Disconnect
+
+Click the **Disconnect** button to disconnect the dApp from your wallet.
+
+<div className="gallery">
+    <Image src="/images/cardanoconnect/disconnect.png" alt="Disconnect from dApp" width={300} height={300} />
+</div>
+
+</Steps>
+
+## Remove a connection
+
+If you want to remove a connection from your wallet, follow these steps:
+
+<Steps>
+
+### Select Connection
+
+In the `Cardano Connect menu`, select the connection you want to remove from the `Connection History`.
+
+### Remove Connection
+
+Click the **Remove** icon to remove the connection from your wallet. Introuduce your passcode or operations password to confirm the removal.
+
+<div className="gallery">
+    <Image src="/images/cardanoconnect/disconnect.png" alt="Remove dApp Connection from Connection History" width={300} height={300} />
+</div>
+
+</Steps>

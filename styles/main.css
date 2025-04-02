@@ -14,3 +14,18 @@ video {
     width: 50%;
   }
 }
+
+.gallery {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+@media (min-width: 1200px) {
+  .gallery {
+    flex-direction: row;
+  }
+}
