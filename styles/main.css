@@ -5,6 +5,10 @@ video {
   padding: 1.5rem 0rem;
 }
 
+.multi-device-video {
+  width: 90%;
+}
+
 @media (min-width: 1024px) {
   video {
     width: 50%;
