@@ -69,7 +69,7 @@ This field should contain a randomly generated salt of sufficiently entropy.
 In case a 3rd party has access to the schema, and SAID of an ACDC, the salt provides sufficient entropy to make it computationally infeasible to discover or calculate the remaining values of the ACDC.
 
 This `u` field can also appear in any block within the ACDC to protect the privacy of the block when partially or selectively disclosing that information.
-Each `u` field within an ACDC should be different.
+Each `u` field within an ACDC should be different — check out this [example](../apis/credentials#private-credentials).
 
 ### Attributes
 
