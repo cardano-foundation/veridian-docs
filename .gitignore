@@ -245,3 +245,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Nextra pagefind
+_pagefind
