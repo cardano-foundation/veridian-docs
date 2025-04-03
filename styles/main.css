@@ -14,3 +14,8 @@ video {
     width: 50%;
   }
 }
+
+footer {
+  font-weight: 600;
+  text-decoration: underline;
+}
