@@ -1,6 +1,6 @@
 {
   "name": "veridian-docs",
-  "description": "Cardano Foundation Identity Wallet Documentation",
+  "description": "Documentation site for the Veridian platform from the Cardano Foundation",
   "repository": {
     "type": "git",
     "url": "https://github.com/cardano-foundation/veridian-docs.git"
@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
     "start": "next start",
     "prettier": "npx prettier . --write",
     "prepare": "husky"
