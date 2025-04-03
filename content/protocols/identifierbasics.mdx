@@ -54,6 +54,11 @@ Any non-ephemeral signatures which we will need to verify any time in the future
 
 Note! An establishment event can also anchor arbitrary data.
 
+<Callout type="info">
+  If arbitrary data is anchored in a KEL, a reference to the KEL event by sequence number can help a verifier find the anchoring of the data.
+  Their KERI agent will ensure that each KERI event up until that point is fully verified.
+</Callout>
+
 ## Pre-rotation
 
 A shortcoming of other decentralized identifier systems is that the current signing key is used to rotate to the new key.
@@ -72,7 +77,7 @@ This phases out old keys in favour of rotation keys, and new rotation keys get a
 A KERI event never contains public keys of the current rotation key set, but rather a hash or digest of each of the public keys.
 
 This protects the keys in the event of a quantum event, and allows a controller to regain control of their identifier, and if available, rotate to a quantum secure key pair in the future.
-In fact, for high security environments, an identifier can be configured to only allow establishment events, so every event in the KEL would be an inception event or rotation event.
+In fact, for high security environments, an identifier can be configured to only allow establishment events, so every event in the KEL would be an inception event or a rotation event — this effectively means every interaction from the identifier uses a different key pair.
 
 ## Witnesses and watchers
 

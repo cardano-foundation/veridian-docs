@@ -142,20 +142,37 @@ Nodes can have multiple edges, and edges can contain operators and weights.
 This enables a way to securely represent provenance over data, backed with credentials, and form relationships between entities.
 Combined with KERI's enterprise-grade identifiers, this enables true organizational identity.
 
-### Edge groups and operators
+### Edges
 
-The rules for how ACDCs can be chained together is outlined in the schemas, as one schema can reference another schema.
-Within a schema, the `e` field defines the correct edge logic for the ACDC issuance to be considered valid.
+The rules for how ACDCs can be chained together is determined by the schema definitions, as one schema can reference another schema.
 
-The top-level `e` field defines the edge group.
-Edge groups can contain individual edges, or nested edge groups.
+The chaining feature of ACDCs has two concepts:
+- Edges
+- Edge groups
 
-Edge groups have m-ary operators, such as `AND`, `OR`, `NOR` and so on.
-The operator dictate how the edge group is cryptographically validated, and the default is `AND`.
+An edge connects two ACDCs together with some operator, and an edge group is a set of related edges which also have an operator.
 
-For example, the schema might define a top-level edge group which has 2 individual edges.
-So by default, if we issue an ACDC, it must be chained to 2 other ACDC nodes which match the schema.
-Or we could change the operator to `OR`, and it only needs 1 valid edge.
+#### Validation
+
+To begin with, let's just imagine one ACDC connecting to another ACDC, so there is an edge between them.
+For the edge to be valid and cryptographically verify, it must match the rules defined in the schema, which define:
+- What other schemas this schema can chain to.
+- The operator on the edge (unary operators).
+
+If an edge is not valid, the ACDC issuance is not valid!
+The ACDC property graph is a type of directed acyclic graph, so if an ACDC does not validate, it won't impact any previously issued ACDCs up the chain.
+
+#### Operators
+
+The default operator is called `I2I`, which means the issuer of one ACDC must be the issuee/holder of the chained ACDC.
+For example, in the vLEI ecosystem, an LE (Legal Entity) credential may be linked to a QVI (Qualified vLEI Issuer) credential with the `I2I` operator.
+
+This means the LE credential is only valid if and only if:
+1. The ACDC it chains to is a QVI credential, verified by the schema SAID.
+2. The LE credential issuer must be the issuee/holder of the QVI credential that it links to.
+In other words, one QVI cannot chain an LE credential to a different QVI's credential.
+
+There are other operators too, such as `NI2I` (opposite of `I2I`), `DI2I` (allows for delegated identifiers) and more.
 
 <Callout type="warning">
   If a credential within the chain is revoked, it doesn't break cryptographic verifiability.
@@ -163,10 +180,16 @@ Or we could change the operator to `OR`, and it only needs 1 valid edge.
   Hence, your business logic should take the revocation status into account separately.
 </Callout>
 
-### Edge operators
+### Edge groups
 
-Individual edges also have their own operators, which are unary operators.
-The default operator on edges is `I2I`, which states that the issuer of this ACDC must be the issuee of the referenced edge ACDC.
+The top-level `e` field of an ACDC defines the edge group, and it can be an edge group of size 1, like in the previous example.
+However, as mentioned before, an edge group can contain multiple edges and form a relationship between the edges, and each edge group has its own special operator.
+
+This time the operator is a boolean logic operator, and in fact, edge groups can contain nested edge groups so it's very flexible!
+Some of the supported (m-ary) operators are `AND`, `OR`, `NOR` and so on.
+`AND` is the default operator for edge groups.
+
+This allows us to model more interesting relationships like requiring two different credentials for proof of authority, _or_ one admin credential.
 
 ### Weights
 
