@@ -2,13 +2,19 @@ import { Footer, Layout } from "nextra-theme-docs";
 import { Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import { NavbarWithThemeLogo } from "../components/NavbarWithThemeLogo";
-import { DOCUMENTATION_GITHUB_REPO_URL } from "../utils/constants";
+import { DOCUMENTATION_GITHUB_REPO_URL, WEBPAGE_URL } from "../utils/constants";
 import "nextra-theme-docs/style.css";
 import "../styles/main.css";
 
 export const metadata = {};
 
-const footer = <Footer>Veridian</Footer>;
+const currentYear = new Date().getFullYear();
+
+const footer = <Footer>
+<a href={WEBPAGE_URL} target="_blank" rel="noopener noreferrer">
+  {`© ${currentYear} Veridian Platform`}
+</a>
+</Footer>;
 
 export default async function RootLayout({ children }) {
   return (
