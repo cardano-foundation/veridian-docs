@@ -5,8 +5,9 @@ video {
   padding: 1.5rem 0rem;
 }
 
-.wide-video {
+.wide-asset {
   width: 90%;
+  margin: 0 auto;
 }
 
 @media (min-width: 1024px) {
