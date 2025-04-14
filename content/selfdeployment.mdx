@@ -63,7 +63,7 @@ docker compose \
 
     a. Generate a fresh `KERIA_PASSCODE` and update the value in the `.env.production` file:
     ```bash
-    KERIA_PASSCODE=$(docker run -it --rm cardanofoundation/cf-keria-passcode-gen)
+    KERIA_PASSCODE=$(docker run -it --rm cardanofoundation/cf-keria-passcode-gen | sed 's/\r//g')
     sed -i "s/^KERIA_PASSCODE=.*/KERIA_PASSCODE=$KERIA_PASSCODE/" .env.production
     ```
 
