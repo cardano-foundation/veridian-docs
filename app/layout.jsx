@@ -6,7 +6,16 @@ import { DOCUMENTATION_GITHUB_REPO_URL, WEBPAGE_URL } from "../utils/constants";
 import "nextra-theme-docs/style.css";
 import "../styles/main.css";
 
-export const metadata = {};
+export const metadata = {
+  openGraph: {
+    images:
+      '/opengraph-image.jpg',
+  },
+  twitter: {
+    images:
+      '/opengraph-image.jpg',
+  }
+};
 
 const currentYear = new Date().getFullYear();
 
