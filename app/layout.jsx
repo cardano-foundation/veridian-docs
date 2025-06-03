@@ -33,10 +33,8 @@ export default async function RootLayout({ children }) {
         <Layout
           navbar={<NavbarWithThemeLogo />}
           pageMap={await getPageMap()}
-          docsRepositoryBase={DOCUMENTATION_GITHUB_REPO_URL}
+          docsRepositoryBase={DOCUMENTATION_GITHUB_REPO_URL + "/tree/main"}
           footer={footer}
-          editLink={null}
-          feedback={{ content: null }}
         >
           {children}
         </Layout>
