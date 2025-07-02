@@ -1,0 +1,129 @@
+# Minimal example
+
+The idea of this example is to provide an absolut minimum example of how to use identifiers from an application written in Java.
+In this example we will cover:
+- Connect to a Keria environment
+- Create an Identifier
+- Interact with the identifier
+- Verify independently if the data is valid
+
+We will use signify to handle the functionality. The repository for the Java implementation can be found here: [Cardano-foundation/cf-signify-java](https://github.com/cardano-foundation/cf-signify-java)
+
+## Prequisites
+### Dependencies
+To use the library one dependency is needed `org.cardanofoundation:signify`.
+To check which version to use please refer to the Github repository or check direclty in the [maven repository](https://mvnrepository.com/artifact/org.cardanofoundation/signify)
+```
+// Gradle
+implementation("org.cardanofoundation:signify:0.1.0")
+```
+```
+// Maven
+<dependency>
+    <groupId>org.cardanofoundation</groupId>
+    <artifactId>signify</artifactId>
+    <version>0.1.0</version>
+</dependency>
+```
+### Infrastructure
+For setting up the infrastructure please refer to the Section [Infrastructure](../infra.mdx) or if a minimal local setup is needed within the github repository is a `docker-compose.yml`
+To run it locally:
+```shell
+git clone https://github.com/cardano-foundation/cf-signify-java
+cd cf-signify-java
+docker compose up -d
+```
+
+## Step-by-step Guide
+In this example, we will use the knowledge from the other chapters. For example, the structure of a KED.
+
+### 1. Creating a client
+
+To connect a client a few parameters are needed. To reuse it we encapsulated it within a function:
+```java
+private static SignifyClient getClient(String bran) throws Exception {
+    // Url is the Keria URL (default is port 3901)
+    SignifyClient client = new SignifyClient(url, bran, Salter.Tier.low, bootUrl, null);
+    try {
+        client.connect();
+    } catch (Exception e) {
+        client.boot();
+        client.connect();
+    }
+    return client;
+}
+```
+
+### 2. Creating an Identifier
+
+To create a client we need an identifier name, a role and the signify client.
+```java
+private static String createIdentifier(String identifierName, String role, SignifyClient client) throws InterruptedException, DigestException, IOException {
+
+    String prefix;
+    try {
+        // We try to get the identifier first, in case it already exists
+        States.HabState habState = client.identifiers().get(identifierName);
+        prefix = habState.getPrefix();
+    } catch (Exception e) {
+        // If it fails, we need to create the identifier
+        EventResult eventResult = client.identifiers().create(identifierName, CreateIdentifierArgs.builder()
+                // Here we could add more details like witnesses
+                .build());
+        prefix = eventResult.serder().getPre();
+        client.identifiers().addEndRole(identifierName, role, client.getAgent().getPre(), null);
+    }
+    // The prefix will be used for further interaction
+    return prefix;
+}
+```
+
+### 3. Interacting with the identifier
+A full example of how to interact with an identifier:
+```java
+// Initializing the client with a bran
+SignifyClient client = getClient("0ADF2TpptgqcDE5IQUF1H");
+// Creating an identifier with a specific name
+String prefix = createIdentifier("Identity1", "agent", client);
+// Our Payload we want to sign
+String testData = "12345";
+// The interaction with keria and writing the payload to the KEL
+EventResult interact = client.identifiers().interact(prefix, testData);
+client.operations().wait(Operation.fromObject(interact.op()));
+// Getting the OOBI for the identifier
+Map<String, Object> stringObjectLinkedHashMap = (Map<String, Object>) client.oobis().get(identifierName, role);
+String oobi = ((List<String>)stringObjectLinkedHashMap.get("oobis")).getFirst();
+// This line is only needed if the java application is not running within the docker network of keria
+oobi = oobi.replace("keria", "localhost");
+
+// Getting the index within the KEL of this interaction event
+Map<String, Object> ked = interact.serder().getKed();
+int interactionIndex = Integer.parseInt(ked.get("s").toString(), 16);
+```
+To verify this data another user only needs to know the prefix of the identifier.
+The interactionIndex will be used for easier verification and searching within the KEL.
+
+### 4. Verifying an interaction
+
+For this interaction step we will create a new identifier with a random bran,
+resolve the oobi to get the knowledge about the identifier from a different client
+and then we compare the data to see if it matches.
+If the interaction is within the KEL it is verified.
+
+```java
+SignifyClient verifierClient = getOrCreateClient(null);
+// resolving the oobi - so that this client knows about the identifier
+Object resolve2 = verifierClient.oobis().resolve(oobi, null);
+Operation operation = Operation.fromObject(resolve2);
+verifierClient.operations().wait(operation);
+// getting the key event log of the identifier by using the prefix
+List<Object> keyEventLog = (List<Object>) verifierClient.keyEvents().get(prefix);
+// accessing the specific event we created in the previous steps
+Map<String, Object> interactionEvent = (Map<String, Object>) keyEventLog.get(interactionIndex);
+Map<String, Object> verificationKed = (Map<String, Object>)interactionEvent.get("ked");
+// Getting the message from the event
+List<String> messages = (List<String>) verificationKed.get("a");
+
+boolean equals = messages.getFirst().equals(testData);
+System.out.println("Verification of interaction: " + equals);
+```
