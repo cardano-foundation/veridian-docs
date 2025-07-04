@@ -1,11 +1,11 @@
 # Minimal example
 
-The idea of this example is to provide an absolut example of how to use identifiers from an application written in Java.
+The idea of this example is to provide a minimal example of how to use identifiers from an application written in Java.
 In this example we will cover:
 - Connect to a Keria environment
 - Create an Identifier
-- Interact with the identifier
-- Verify independently if the data is valid
+- Create an interaction event
+- Verify independently if the data was correctly anchored in the identifier's KEL
 
 We will use signify to handle the functionality. The repository for the Java implementation can be found here: [Cardano-foundation/cf-signify-java](https://github.com/cardano-foundation/cf-signify-java)
 
@@ -56,7 +56,7 @@ private static SignifyClient getClient(String bran) throws Exception {
 
 ### 2. Creating an Identifier
 
-To create a client we need an identifier name, a role and the signify client.
+To create an identifier we need a name, a role and the signify client.
 ```java
 private static String createIdentifier(String identifierName, String role, SignifyClient client) throws InterruptedException, DigestException, IOException {
 
@@ -70,6 +70,8 @@ private static String createIdentifier(String identifierName, String role, Signi
         EventResult eventResult = client.identifiers().create(identifierName, CreateIdentifierArgs.builder()
                 // Here we could add more details like witnesses
                 .build());
+        // waiting for operation to be completed
+        client.operations().wait(Operation.fromObject(eventResult.op()));
         prefix = eventResult.serder().getPre();
         client.identifiers().addEndRole(identifierName, role, client.getAgent().getPre(), null);
     }
@@ -93,8 +95,6 @@ client.operations().wait(Operation.fromObject(interact.op()));
 // Getting the OOBI for the identifier
 Map<String, Object> stringObjectLinkedHashMap = (Map<String, Object>) client.oobis().get(identifierName, role);
 String oobi = ((List<String>)stringObjectLinkedHashMap.get("oobis")).getFirst();
-// This line is only needed if the java application is not running within the docker network of keria
-oobi = oobi.replace("keria", "localhost");
 
 // Getting the index within the KEL of this interaction event
 Map<String, Object> ked = interact.serder().getKed();
@@ -109,6 +109,8 @@ For this interaction step we will create a new identifier with a random bran,
 resolve the oobi to get the knowledge about the identifier from a different client
 and then we compare the data to see if it matches.
 If the interaction is within the KEL it is verified.
+
+
 
 ```java
 SignifyClient verifierClient = getOrCreateClient(null);
@@ -127,3 +129,5 @@ List<String> messages = (List<String>) verificationKed.get("a");
 boolean equals = messages.getFirst().equals(testData);
 System.out.println("Verification of interaction: " + equals);
 ```
+
+__Important Note__: The oobi must be resolved once, and only once. If there are new interaction events added, they can be obtained with `client.keyStates().query()`
