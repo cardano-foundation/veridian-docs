@@ -38,9 +38,9 @@ This keeps Web2 compatibility, although of course, the end-goal is to get rid of
 git clone https://github.com/cardano-foundation/veridian-wallet.git
 cd veridian-wallet
 ```
-2. Copy the `.env.production-traefik` file to `.env.production`:
+2. Copy the `.env.production.traefik` file to `.env.production`:
 ```bash
-cp .env.production-traefik .env.production
+cp .env.production.traefik .env.production
 ```
 3. Edit the `.env.production` file and set the `PUBLIC_DOMAIN` and `ACME_ADMIN_EMAIL` variables.
 4. Initialize witnesses' configuration:
@@ -48,7 +48,7 @@ cp .env.production-traefik .env.production
 docker compose \
     --profile witness-init \
     --env-file .env.production \
-    -f docker-compose.production-traefik.yaml \
+    -f docker-compose.production.traefik.yaml \
     up
 ```
 5. Boot up witnesses:
@@ -56,7 +56,7 @@ docker compose \
 docker compose \
     --profile witness \
     --env-file .env.production \
-    -f docker-compose.production-traefik.yaml \
+    -f docker-compose.production.traefik.yaml \
     up -d
 ```
 6. Initialize KERIA's configuration by following these steps:
@@ -69,7 +69,9 @@ docker compose \
 
     b. Gather witnesses' OOBIs and check that they all (0-5) look correct:
     ```bash
-    export KERIA_IURLS=$(INITIAL_PORT=5642; for wit in $(seq 0 5); do OOBI=$(docker compose -f docker-compose.production-traefik.yaml logs witness-$wit 2>/dev/null | grep Witness.wit | awk '{print $NF}'); echo http://witness-$wit:$(( INITIAL_PORT + wit ))/oobi/${OOBI}/controller?role=witness; done | xargs echo)
+    export KERIA_IURLS=$(INITIAL_PORT=5642; for wit in $(seq 0 5); do OOBI=$(docker compose -f docker-compose.production.traefik.yaml logs witness-$wit 2>/dev/null | grep Witness.wit | awk '{print $NF}'); echo http://witness-$wit:$(( INITIAL_PORT + wit ))/oobi/${OOBI}/controller?role=witness; done | xargs echo)
+    ```
+    ```bash
     echo $KERIA_IURLS
     ```
 
@@ -78,7 +80,7 @@ docker compose \
     docker compose \
         --profile keria-init \
         --env-file .env.production \
-        -f docker-compose.production-traefik.yaml \
+        -f docker-compose.production.traefik.yaml \
         up
     ```
 7. Boot up the rest of the services:
@@ -86,7 +88,7 @@ docker compose \
 docker compose \
     --profile production \
     --env-file .env.production \
-    -f docker-compose.production-traefik.yaml \
+    -f docker-compose.production.traefik.yaml \
     up -d
 ```
 
