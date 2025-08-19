@@ -50,7 +50,7 @@ This seed is used to generate public-private key pairs deterministically, and th
 In the implementation and tests, this seed is often referred to as the bran or passcode.
 
 ```ts showLineNumbers
-import { SignifyClient, ready } from "signify-ts";
+import { SignifyClient, ready, Tier } from "signify-ts";
 
 await ready();
 const client = new SignifyClient(
