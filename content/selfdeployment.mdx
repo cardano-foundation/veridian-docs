@@ -69,7 +69,7 @@ docker compose \
 
     b. Gather witnesses' OOBIs and check that they all (0-5) look correct:
     ```bash
-    export KERIA_IURLS=$(INITIAL_PORT=5642; for wit in $(seq 0 5); do OOBI=$(docker compose -f docker-compose.production.traefik.yaml logs witness-$wit 2>/dev/null | grep Witness.wit | awk '{print $NF}'); echo http://witness-$wit:$(( INITIAL_PORT + wit ))/oobi/${OOBI}/controller?role=witness; done | xargs echo)
+    export KERIA_IURLS=$(INITIAL_PORT=5642; for wit in $(seq 0 5); do OOBI=$(docker compose -f docker-compose.production.traefik.yaml --env-file .env.production logs witness-$wit 2>/dev/null | grep Witness.wit | awk '{print $NF}'); echo "http://witness-$wit:$(( INITIAL_PORT + wit ))/oobi/${OOBI}/controller?role=witness"; done | xargs echo)
     ```
     ```bash
     echo $KERIA_IURLS
