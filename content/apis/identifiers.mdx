@@ -19,7 +19,7 @@ Using the human friendly name as an API argument will be phased out eventually, 
 ```ts useLineNumbers
 const result = await client.identifiers().create("Alice");
 const operation = await result.op();
-const prefix = operation.serder.ked.i;
+const prefix = result.serder.ked.i;
 
 // Wait for operation to complete...
 
