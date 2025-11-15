@@ -115,6 +115,16 @@ In case you want to do it manually, you can find the Helm chart source and docum
    ```sh
    curl -so /tmp/helm-install.sh https://raw.githubusercontent.com/cardano-foundation/cf-helm-charts/refs/heads/main/charts/cf-idw/helm-install.sh
    ```
+  **Important**: Before executing the script, review it and adapt the Helm installation command. The script contains a command that references a local chart directory, but you need to change it to reference the remote chart repository:
+  ```sh
+  helm install \
+     ${HELM_RELEASE_NAME} \
+     cardano-foundation/cf-idw \
+     --create-namespace \
+     --namespace ${NAMESPACE} \
+     --set ingressTLDs="{$PUBLIC_DOMAINS}" \
+     --set witness.witnessCount=${WITNESS_COUNT}
+  ```
 
 2. **Execute the script** with the required environment variables:
    ```sh
