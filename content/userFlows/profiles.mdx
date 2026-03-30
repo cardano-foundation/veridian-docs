@@ -1,0 +1,33 @@
+import { Callout, Steps } from "nextra/components";
+
+# Profiles
+
+After completing the onboarding process, your next step is to create your first profile.
+
+If you'd like to use this profile to connect to a Cardano dApp using the [Cardano Connect](./cardanoconnect) feature, you must use an Individual identifier at this time.
+Group profile integration with dApps will be coming in the future.
+
+## Key rotation
+
+Keys can be actively rotated for profiles within the manage profile section.
+This helps keep your profile secure in case your signing keys have been compromised.
+In the future, we aim to have advanced notification mechanisms to prompt when you should rotate, or even automatically do it for you.
+
+For now, you cannot rotate keys for a group profiles, but it's on the near-term roadmap.
+
+<video src="https://ucarecdn.com/e522868d-f31a-473d-a14a-46e25e2cb453/" type="video/mp4" controls />
+
+## Deletion
+
+If you no longer require an profile, you can choose to delete it.
+Recovery at this point is still technically possible, but it wouldn't be straight-forward and is not supported with our wallet currently.
+Please ensure you only delete profiles that you will never need again!
+
+Deleting your profile will delete any credentials and pending notifications related to that profile.
+
+<Callout type="info">
+  In KERI, you can "abandon" an identifier by rotating to empty keys but we have not implemented this yet.
+  If implemented, deletion would mean your identifier is not recoverable, but also means that attackers can't impersonate you using your old, deleted identifiers.
+</Callout>
+
+<video src="https://ucarecdn.com/4b82fc20-018b-437b-ac93-0b1a9f0173a0/" type="video/mp4" controls />

@@ -1,8 +1,7 @@
 export default {
-  individualid: "Identifiers",
+  profiles: "Profiles",
   connections: "Connections",
   credentials: "Credentials",
-  groupid: "Creating a group",
   groupcredentials: "Group credentials",
   cardanoconnect: "Cardano Connect",
   settings: "Settings"

@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Veridian Documentation",
     short_name: "Veridian Docs",
     description:
-      "Documentation for Veridian, The Identity Platform Built for Tomorrow",
+      "Documentation for Veridian",
     start_url: "/",
     display: "standalone",
     theme_color: "#ffffff",

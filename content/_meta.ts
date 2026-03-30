@@ -15,6 +15,7 @@ export default {
     },
   },
   onboarding: "",
+  profileCreation: "Profile Creation",
   userFlows: {
     title: "User Flows",
     theme: {

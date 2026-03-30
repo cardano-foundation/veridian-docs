@@ -1,0 +1,63 @@
+import { Steps, Callout } from "nextra/components";
+
+# Profile Creation
+
+The Veridian wallet allows you to create multiple profiles to manage your digital identities. 
+After completing the onboarding process, you can choose to create either an **Individual** or a **Group** profile.
+
+## Individual Group
+
+To set up an individual profile, simply enter a name for the new profile. 
+Once you confirm the name, your profile is ready for immediate use.
+
+<video src="https://ucarecdn.com/fe7e9f8f-7a65-46d2-93e4-ded100726889/" type="video/mp4" controls />
+
+## Group Profile
+
+Group Profiles are represented by threshold multi-sig identifiers.
+The creation of a group profile builds on the idea of connections, as all members will need a way to coordinate the creation and usage of the group profile. Remember — there’s no central platform for coordination!
+
+<Steps>
+### Initiator setup
+
+One member acts as the **Initiator** by selecting the "Group Profile" type and assigning it a name. 
+The Initiator then chooses their own username within that group. 
+Once initialized, a connection QR code will appear, which can be shared with the other prospective members.
+
+### Member setup
+
+To join, other members must scan the Initiator’s QR code via the "Join a Group" option in the Veridian wallet's profile menu. 
+After scanning and choosing their own group username, they can proceed to the next step.
+
+### Remaining QR exchanges
+
+Now, each group member will have their own QR code — initiator and non-initiators alike.
+To ensure a secure, decentralized setup, each member (excluding the Initiator) must connect with all other members. 
+You can track connected members at the bottom of your screen.
+
+Note that you will only see members whose QR codes you have personally scanned. For the group to be valid, every member must scan everyone else's code.
+
+<Callout type="info">
+  This first iteration of group creation was intended to be flexible and secure, but we are aware of the complexities in scanning so many QR codes.
+  It's quite easy for a group of 2, or maybe 3, but quickly gets harder.
+  
+  We have a design in place to implement that will drastically reduce the QR codes scanned, and use broadcasting under the hood to propagate the group member list.
+  However we do it, we want to keep security as a priority.
+</Callout>
+
+### Finalize setup
+
+Once all members are interconnected, the Initiator can finalize the group profile. 
+At this point, the Initiator can remove any undesired participants and define the **signing and recovery thresholds**. 
+The threshold determines the minimum number of signatures required to authorize transactions, rotate keys, or recover the profile.
+
+### Confirm group profile settings
+
+Finally, all members receive a notification from the Initiator to review and accept the group settings. 
+The group profile is officially created once the number of members accepting the request meets the defined threshold.
+
+</Steps>
+
+Once created, every member can access the group profile from their wallet and begin using it.
+
+<video src="https://ucarecdn.com/6d2fbcf7-ee85-4e5f-ba70-4a1c14156881/" class="wide-asset" type="video/mp4" controls />

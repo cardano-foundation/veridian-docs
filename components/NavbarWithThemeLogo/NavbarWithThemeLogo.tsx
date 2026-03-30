@@ -28,7 +28,7 @@ const NavbarWithThemeLogo = () => {
         <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
           <Image
             src={logo}
-            alt="Veridian Platform Logo"
+            alt="Veridian Logo"
             height={40}
             style={{ objectFit: "contain" }}
           />

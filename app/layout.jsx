@@ -21,7 +21,7 @@ const currentYear = new Date().getFullYear();
 
 const footer = <Footer>
 <a href={WEBPAGE_URL} target="_blank" rel="noopener noreferrer">
-  {`© ${currentYear} Veridian Platform`}
+  {`© ${currentYear} Veridian`}
 </a>
 </Footer>;
 
