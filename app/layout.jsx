@@ -9,11 +9,11 @@ import "../styles/main.css";
 export const metadata = {
   openGraph: {
     images:
-      '/opengraph-image.jpg',
+      '/opengraph-image.png',
   },
   twitter: {
     images:
-      '/opengraph-image.jpg',
+      '/opengraph-image.png]',
   }
 };
 
