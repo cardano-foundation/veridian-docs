@@ -46,7 +46,7 @@ Anywhere in this document that we assign to a `result` or `operation` variable f
 ### Witnesses
 
 Aside from non-transferable identifiers, we strongly recommend all identifiers to use witnesses with sane thresholds.
-Witnesses run the [KAWA](https://trustoverip.github.io/tswg-keri-specification/#keris-algorithm-for-witness-agreement-kawa) algorithm for consensus but the thresholds **must** be set correctly for it to function correctly.
+Witnesses run the [KAWA](https://trustoverip.github.io/kswg-keri-specification/#keris-algorithm-for-witness-agreement-kawa) algorithm for consensus but the thresholds **must** be set correctly for it to function correctly.
 
 The whitepaper and this [discussion](https://github.com/WebOfTrust/keripy/discussions/837) contain information on how to select witness pool sizes and appropriate thresholds.
 Our sandbox environments deploy 6 witnesses by default, and our wallet uses a threshold of 4 for this pool size.

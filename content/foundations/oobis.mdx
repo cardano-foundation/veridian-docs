@@ -11,14 +11,14 @@ This doesn't tell us very much to begin with.
 Primarily, we don't know which public keys or witnesses relate to this identifier, and we don't know the endpoint where an agent would accept messages for this identifier.
 
 This is a discovery problem, where the network is very decentralized with every controller managing its own keys, and deciding which endpoint to accept messages on.
-To help us, we have something known as an [out of band introduction](https://trustoverip.github.io/tswg-keri-specification/#out-of-band-introduction-oobi).
+To help us, we have something known as an [out of band introduction](https://trustoverip.github.io/kswg-keri-specification/#out-of-band-introduction-oobi).
 
 Simply put, an OOBI URL is an endpoint which contains the relevant identifier within the URL, such as `https://keria-provider.com/oobi/ED4KeyyTKFj-72B008OTGgDCrFo6y7B2B73kfyzu5Int`.
 When the endpoint is called (with a GET request), some cryptographic material is returned, such as the KEL of the identifier.
 This allows another party to first verify that the digest of the inception event equals the identifier in the URL, and that any other events in the KEL verify based on KERI rules.
 
 There also needs to be some signed information to authorize the endpoint `https://keria-provider.com`; otherwise, any website could act as an OOBI endpoint for an identifier as KELs are public!
-In fact, all data at this endpoint is signed at rest using KERI's [BADA policy](https://trustoverip.github.io/tswg-keri-specification/#bada-best-available-data-acceptance-policy) which aligns with zero trust network architecture.
+In fact, all data at this endpoint is signed at rest using KERI's [BADA policy](https://trustoverip.github.io/kswg-keri-specification/#bada-best-available-data-acceptance-policy) which aligns with zero trust network architecture.
 
 ## Endpoint roles
 

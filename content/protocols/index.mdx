@@ -6,7 +6,7 @@ import { Callout } from "nextra/components";
 
 # Protocols
 
-The [KERI whitepaper](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/KERI_WP_2.x.web.pdf) is over 140 pages long and has resulted in three separate specifications in Trust over IP: [KERI](https://trustoverip.github.io/tswg-keri-specification/), [ACDC](https://trustoverip.github.io/tswg-acdc-specification/) and [CESR](https://trustoverip.github.io/tswg-cesr-specification/).
+The [KERI whitepaper](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/KERI_WP_2.x.web.pdf) is over 140 pages long and has resulted in three separate specifications in Trust over IP: [KERI](https://trustoverip.github.io/kswg-keri-specification/), [ACDC](https://trustoverip.github.io/kswg-acdc-specification/) and [CESR](https://trustoverip.github.io/kswg-cesr-specification/).
 For now, we'll just give a brief overview, and hope to expand these sections in the future.
 
 These protocols have been developed from the ground up with a first principles approach, which can lead to being exposed to overwhelming, low level details.
@@ -39,7 +39,7 @@ An ACDC is a data container that is issued by a KERI identifier.
 In KERI, there is a strong binding between which keys were used to issue which ACDCs, despite key rotations — more on that [later](./protocols/acdcs#kel-anchoring).
 The lack of this binding in other ecosystems leads to complications such as a issuer key rotation effectively breaking the validation of all previously issued credentials.
 
-The schema or format of the data container is referenced within the ACDC as a [SAID](https://trustoverip.github.io/tswg-cesr-specification/#self-addressing-identifier-said), which prevents security issues prevalent in other Verifiable Credential protocols that rely on web-hosted JSON schema URLs.
+The schema or format of the data container is referenced within the ACDC as a [SAID](https://trustoverip.github.io/kswg-cesr-specification/#self-addressing-identifier-said), which prevents security issues prevalent in other Verifiable Credential protocols that rely on web-hosted JSON schema URLs.
 
 <Callout type="info">
   In CESR encoding (see section below), the hash of the data is called the SAID or self-addressing identifier.
