@@ -15,13 +15,13 @@ export default {
     },
   },
   onboarding: "",
-  profileCreation: "Profile Creation",
-  userFlows: {
-    title: "User Flows",
+  profiles: {
+    title: "Profiles",
     theme: {
       collapsed: true,
     },
   },
+  settings: "",
   recovery: "",
   ___: {
     type: "separator",
