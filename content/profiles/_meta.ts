@@ -1,5 +1,5 @@
 export default {
-  profilecreation: "Profile creation",
-  switchingprofiles: "Switching profiles",
+  creatingaprofile: "Creating a profile",
+  yourprofile: "Your profile",
   managingprofiles: "Managing profiles",
 };
