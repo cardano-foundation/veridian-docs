@@ -1,0 +1,73 @@
+import { Steps, Callout } from "nextra/components";
+
+# Profile Creation
+
+The Veridian Wallet allows you to create profiles to represent your digital identity.
+Each profile is backed by a different cryptographic identifier which digitally signs critical actions.
+
+After completing the onboarding process, you will be prompted to create your first profile.
+As we touched on [earlier](../beforeyoustart#profiles), you can create both Individual and Group profiles.
+
+<Callout type="info">
+  The Cardano Connect feature is only available within Individual profiles.
+</Callout>
+
+## Individual profile
+
+To set up an individual profile, select the Individual profile type and simply enter a name for the new profile. 
+Once you confirm the name, your profile is ready for immediate use.
+
+<video src="https://ucarecdn.com/fe7e9f8f-7a65-46d2-93e4-ded100726889/" type="video/mp4" controls />
+
+## Group profile
+
+A group of people may create a jointly-controlled profile.
+These types of profiles for example could be used to represent a legal entity.
+
+Under the hood, there will be a multi-signature identifier, and each group member will control key pairs on their respective device.
+The member setting up the group decides on what thresholds to set for the multi-signature scheme.
+
+<Steps>
+### Initiator setup
+
+One member acts as the initiator and begins setting up the group.
+The group can be set up directly after onboarding, or from the profile switcher.
+
+The initiator will need to first select the group name, along with their own username within the group.
+Once confirmed, a QR code will be displayed which can be shared with the other members so they can join.
+
+### Member setup
+
+To join, the other members will need to select the option to join an existing group.
+This option is available directly after onboarding, but is also available in the profile switcher in case you have already set up other profiles.
+
+This will open the camera to scan the QR code, which can also be manually pasted if desired.
+Each member will also need to set their username.
+
+### Remaining QR exchanges
+
+At this stage, each group member will have their own QR code — initiator and non-initiators alike.
+Beneath the QR code, there will be a list of group members.
+
+You will only be able to see members for which you have scanned QR codes, so you need to go ahead and scan everyone else’s QR code.
+Each member must do this.
+
+<Callout type="info">
+  This entire step will soon be replaced by automatic discovery under the hood!
+</Callout>
+
+### Finalize setup
+
+Once all members are interconnected, the initiator can finalize the group profile. 
+At this point, any undesired participants can be removed and the signing and recovery thresholds must be set.
+The signing threshold determines the number of group members required to agree on an action, and the recovery threshold determines the number of members required to recover the group profile by rotating keys.
+
+### Accept
+
+Finally, each group member will be prompted to accept the initiator's final setup.
+If they are happy, they can accept and the group identifier will be pending until a threshold amount of members accept.
+</Steps>
+
+Once complete, you can access the group profile from their wallet and begin using it.
+
+<video src="https://ucarecdn.com/6d2fbcf7-ee85-4e5f-ba70-4a1c14156881/" className="wide-asset" type="video/mp4" controls />
