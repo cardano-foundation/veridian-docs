@@ -4,7 +4,8 @@ import { Callout, Steps } from "nextra/components";
 
 Connections can be used to interact with other wallets or services.
 For example, you may connect to an issuer to receive a credential.
-You may create new connections within any profile (or multiple), or alternatively you may share your profile with others by way of a connection QR code.
+You may create new connections within any profile, or alternatively you may share your profile with others by way of a connection QR code.
+You can even add the same connection within multiple profiles.
 
 If any connections you add cannot be established right away, it will be marked as pending and will eventually complete in the background.
 If not, you can always delete the pending connection.
@@ -21,8 +22,8 @@ To demonstrate how connections work, we will use our Credential Issuance tooling
 For development, we use this [URL](https://cred-issuance-ui.dev.idw-sandboxes.cf-deployments.org/) — however, it is not stable or intended for production!
 
 <Callout type="warning">
-  The issuer tool is intended to aid development of the wallet, and empower quick integration of credentials into your use cases.
-  It's not a full fledged Credential Issuance tool that is ready for production deployments.
+  The issuer tool is intended to aid the development of the wallet, and empower quick integration of credentials into your use cases.
+  It's not a full-fledged credential issuance tool that is ready for production deployments.
 </Callout>
 
 <Steps>
@@ -34,6 +35,8 @@ The `Add Connection` button may be selected to display the connection QR code of
 From the wallet, you may navigate to the connections tab of the profile which you'd like to connect to the tool.
 From here, simply scan the connection QR code, and a new connection should be added called "CF Credential Issuance".
 
+You can also add a connection directly from the home page.
+
 <Callout type="info">
   Once connected, all communications will be end-to-end encrypted with incredibly robust security using a technique called Encrypt Sender and Sign Receiver.
   This provides particular security advantages over other protocols like DIDComm; technical folk can read more [here](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/SPAC_Message.md#best-combined-authenticity-and-confidentiality).
@@ -42,7 +45,7 @@ From here, simply scan the connection QR code, and a new connection should be ad
 ### Share our profile
 
 The connection QR code of your wallet may be found on the "Provide" tab of the connections scanner you just used.
-It is also located within the manage profile page under the share option.
+It is also located within the profile management page under the share option.
 
 Now, within the issuer tool, you can click the next button in the connect flow.
 From here you will have the choice of using your webcam to scan your phone, or pasting the connection URL.
@@ -76,5 +79,5 @@ Deleting a connection will remove the connection from that profile, and permanen
 
 Sometimes you might receive a notification from an unknown connection, or from a previously deleted connection.
 You won't be able to action on these notifications until you add, or re-add the connection.
-We believe on providing as much feedback as possible to the user in case they forget to complete the connection flow.
+We believe in providing as much feedback as possible to the user in case they forget to complete the connection flow.
 For spam prevention, we will likely block these from appearing once we have the interactive connection flow developed!

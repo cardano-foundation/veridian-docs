@@ -3,7 +3,7 @@ import { Callout } from "nextra/components";
 # Before you start
 
 Through Veridian, we empower individuals and organizations to create a more secure web where data and interactions are verifiable.
-We do this in a privacy-preserving way without any centralized platforms, prefering a decentralized, protocols-first approach.
+We do this in a privacy-preserving way without any centralized platforms, preferring a decentralized, protocols-first approach.
 
 Throughout this documentation, you will see several references to cryptographic identifiers.
 They are similar to a wallet address on a blockchain in that they are controlled by cryptographic key pairs.
@@ -18,7 +18,7 @@ These key pairs may be used to digitally sign data so that the data can be attri
 
 Later, you will see that users can create profiles within the Veridian Wallet.
 Each profile is backed by an identifier, and profiles may be created for individuals or groups.
-A uer might choose to create multiple profiles which represent different personas of that person's digital identity.
+A user might choose to create multiple profiles which represent different personas of that person's digital identity.
 
 For now, individual profiles use single-signature identifiers under the hood.
 This means there is one key pair to sign attestations, and one key pair to rotate keys.
@@ -38,7 +38,7 @@ A threshold can be set to decide how many members of a group are required to sig
 
 ## Rotating keys
 
-Identifiers will build up reputation over time as they sign more data, and may also hold or issue valuable credentials.
+Identifiers will build up reputation over time as they sign more data, and may also hold or issue important Verifiable Credentials.
 Additionally, the more data you sign with a key, the more exposed it gets, either through its environment or cryptanalysis.
 
 As such, it's important to be able to update the keys which relate to your identifiers over time.
@@ -53,7 +53,7 @@ This is why we are so keen on being ready for any potential key compromise or de
 
 Single or multi-signature identifiers may also be delegated.
 Delegation in KERI is known as co-operative delegation and can be used in enterprise for top-down hierarchical identifier recovery.
-It also has other scalability benefits, for those who are interested in the various types of benefits, please check out [this section](../protocols/delegation) of our developer docs.
+It also has other scalability benefits; for those who are interested in the various types of benefits, please check out [this section](../protocols/delegation) of our developer docs.
 
 There are some advanced features of recovery that are enabled by delegated identifiers, but we think it would be a little too much for this documentation.
 Delegated identifiers aren't supported in the wallet yet but are indeed planned for our next release!
