@@ -1,5 +1,5 @@
 export default {
   oobis: "OOBIs",
-  async: "Async Operations",
+  async: "Async operations",
   notifications: "Notifications"
 };

@@ -13,7 +13,7 @@ export const metadata = {
   },
   twitter: {
     images:
-      '/opengraph-image.png]',
+      '/opengraph-image.png',
   }
 };
 

@@ -1,0 +1,55 @@
+import { Callout } from "nextra/components";
+
+# Your profile
+
+Within each profile, the respective credentials, connections and notifications will be shown, along with a tab for the home page.
+
+## Home page
+
+The home page on the left provides the user with quick access to various features.
+The feature set shown on the home page will differ between Individual and Group profiles, as [Cardano connect](../features/cardanoconnect) and key rotation are currently both only available for Individual profiles.
+
+<video src="https://ucarecdn.com/23b28211-e988-4627-87e8-2d57c8480b79/" type="video/mp4" controls />
+
+### Recovery phrase
+
+The home page will also display a blue banner to verify your recovery phrase.
+This is an 18-word recovery phrase which should be written down and stored in a secure location — in case you ever lose your phone, it will be required to recover your digital identity on your new device.
+
+For technical readers, the recovery phrase is a BIP-39 conversion of a salt in the KERI ecosystem, which is different from Cardano crypto wallets.
+These salts are not quite the right length for BIP-39, so they have been padded with zeros to convert to 18 words. 
+You might notice `abandon` appears often towards the end of generated recovery phrases, but don’t worry — this padding is not used for cryptographic functions.
+
+<Callout type="warning">
+  Right now, this recovery phrase is the only way to restore your wallet if your device is lost or reset.
+  Going forward, we will be exploring how to use multi-sig identifiers for multi-device and social-recovery.
+  And don’t worry, your existing identifiers will be migratable from the recovery phrase.
+</Callout>
+
+After you have written down your recovery phrase, you can verify that you have written it down correctly.
+Once that is complete, the blue banner will go away.
+
+After onboarding, you must complete the verification of your recovery phrase within 2 weeks.
+This time limit drops to 1 day in case you perform a number of critical actions.
+
+<video src="https://ucarecdn.com/d5dbc241-af50-40db-93f1-a64752048a8b/" type="video/mp4" controls />
+
+You can also access the verification flow from the Settings page.
+
+<video src="https://ucarecdn.com/bef33437-e8f3-4648-a53d-dcfcb4e4e383/" type="video/mp4" controls />
+
+
+## Switching profiles
+
+Users can navigate to the profile switcher by clicking the profile icon on the top-right corner of the screen.
+Here they will see a list of all profiles, and be able to add new profiles if they'd like.
+
+### Notifications
+
+In case you have unread notifications on another profile, you will be able to see an indicator on the profile switcher.
+In addition, if you receive a notification to a profile you are not currently viewing, a push notification will be sent to your device if enabled.
+Clicking on the push notification will automatically navigate you to the notifications tab of the respective profile, if it still exists.
+
+<Callout type="info">
+  For now, push notifications are only received while the app is open as an indicator to check your other profiles.
+</Callout>
