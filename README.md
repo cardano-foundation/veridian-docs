@@ -12,7 +12,7 @@
    ![Discord](https://img.shields.io/discord/1022471509173882950)
 </div>
 
-Welcome to the documentation site repository for the [Veridian platform](https://www.veridian.id/).
+Welcome to the documentation site repository for [Veridian](https://www.veridian.id/).
 This site is generated using [Nextra](https://nextra.site/), a Next.js based static site generator.
 Follow the instructions below to get started with the project.
 

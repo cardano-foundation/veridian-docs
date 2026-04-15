@@ -9,26 +9,29 @@ export default {
     title: "Wallet User Guide",
   },
   walletGuide: "Introduction",
-  fundamentals: {
-    theme: {
-      collapsed: true,
-    },
-  },
+  beforeyoustart: "Before you start",
   onboarding: "",
-  userFlows: {
-    title: "User Flows",
+  profiles: {
+    title: "Profiles",
     theme: {
       collapsed: true,
     },
   },
+  features: {
+    title: "Wallet features",
+    theme: {
+      collapsed: true,
+    },
+  },
+  settings: "",
   recovery: "",
   ___: {
     type: "separator",
     title: "Infrastructure",
   },
   infra: "Overview",
-  sandbox: "Hosted Sandbox",
-  selfdeployment: "Self Deployment",
+  sandbox: "Hosted sandbox",
+  selfdeployment: "Self deployment",
   ____: {
     type: "separator",
     title: "Developer Guide",
@@ -41,7 +44,7 @@ export default {
     },
   },
   stack: {
-    title: "Getting Started",
+    title: "Getting started",
     theme: {
       collapsed: true,
     },

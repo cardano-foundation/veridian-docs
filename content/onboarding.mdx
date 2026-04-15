@@ -17,7 +17,7 @@ Your mobile device must have a hardware element for secure cryptography — most
 In addition, only the following operating system versions are supported; any earlier versions no longer receive security updates.
 
 - **iOS:** Version 18.0 — Crystal
-- **Android:** Version 12 — Snow Cone (API level 31)
+- **Android:** Version 14 — Upside Down Cake (API level 34)
 
 ## Wallet setup
 
@@ -26,14 +26,15 @@ For new users, please follow these steps; we've also attached a video at the bot
 <Steps>
 ### Install and launch the app
 Install the app from the [App Store](https://apps.apple.com/us/app/veridian-wallet/id6590628073) or [Play Store](https://play.google.com/store/apps/details?id=org.cardanofoundation.idw), and launch the Veridian Wallet!
-Once loaded, you can click `Get started`.
+Once loaded, you can click `Get started` and proceed to read and accept the terms of use and privacy policy.
+
  
-### Create a passcode
-Choose a secure passcode.
-This passcode will be used to access the app and may be used to perform critical functions within the app.
+### Create a PIN
+Choose a secure PIN.
+This PIN will be used to access the app and may be used to perform critical actions within the app. This PIN will be the same for all the profiles across the wallet.
 
 If your phone supports it, you will be asked to optionally set up biometrics too!
-For now, biometrics are only used for login.
+Biometrics may be used instead of the PIN or password (see below).
 
 <Callout type="warning">
   We only support "secure" biometrics, so you may not see the biometric prompts on your device.
@@ -41,36 +42,21 @@ For now, biometrics are only used for login.
   In Android, face ID is not considered secure and even some fingerprint scanners have been deemed insecure.
 </Callout>
 
-### Create an operations password (optional!)
-The operations password is a more secure alternative to the passcode.
-Once enabled, you will need to use it instead of the passcode for operations when the app is unlocked.
+### Create a password (optional!)
+The password is a more secure alternative to the PIN. This password will be the same for all the profiles across the wallet.
 
-The passcode or biometrics will still be used to unlock the app.
+Once enabled, it will replace the PIN for performing critical actions when the app is unlocked.
+The PIN will still be used to unlock the app.
 
-### Generate your recovery phrase
-The app will display an 18-word recovery phrase — write it down and store it in a secure location.
+### Connect to Veridian
+Scan your onboarding QR code.
+Where this is found depends on your infrastructure deployment; for example, sandbox users will receive an email to bootstrap their wallet to the cloud agent.
 
-For technical readers, the recovery phrase is a BIP-39 conversion of a salt in the KERI ecosystem, which is different from Cardano crypto wallets.
-These salts are not quite the right length for BIP-39, so they have been padded with zeros to convert to 18 words.
-You might notice `abandon` appears often towards the end of generated recovery phrases, but don't worry — this padding is not used for cryptographic functions.
+Now you’re ready to create your first profile.
 
-<Callout type="warning">
-  Right now, this recovery phrase is the only way to restore your wallet if your device is lost or reset.
-  Going forward, we will be exploring how to use multi-sig identifiers for multi-device and social-recovery.
-  And don't worry, your existing identifiers will be migratable from the recovery phrase.
+<Callout type="info">
+  Developers may choose to use the "Advanced setup" to directly enter the boot and connect URLs of the cloud agent.
 </Callout>
-
-After accepting the terms of use, you will be asked to verify the order of the words to ensure you copied it correctly.
-
-### SSI agent details
-Enter your Boot and Connect URLs.
-Where these are found depends on your infrastructure deployment; for example, sandbox users will receive an email to bootstrap their wallet to the cloud agent.
-
-### Complete
-Finally, you can set your display name.
-Please note that this will be shared when connecting with other wallets and services.
-
-Now you’re ready to explore the wallet’s features.
 </Steps>
 
-<video src="https://ucarecdn.com/cfc73865-f583-4b0b-86fc-d881503f13f2/" type="video/mp4" controls />
+<video src="https://ucarecdn.com/d7ac0c0e-853d-4de2-b50a-95ab85830e0a/" type="video/mp4" controls />

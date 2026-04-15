@@ -1,6 +1,6 @@
 {
   "name": "veridian-docs",
-  "description": "Documentation site for the Veridian platform from the Cardano Foundation",
+  "description": "Documentation site for Veridian",
   "repository": {
     "type": "git",
     "url": "https://github.com/cardano-foundation/veridian-docs.git"

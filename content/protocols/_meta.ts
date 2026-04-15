@@ -1,5 +1,5 @@
 export default {
-  identifierbasics: "Identifier Basics",
+  identifierbasics: "Identifier basics",
   acdcs: "ACDCs",
   delegation: "Delegation",
 };
