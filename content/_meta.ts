@@ -61,6 +61,12 @@ export default {
       collapsed: true,
     },
   },
+  examplesJava: {
+    title: "Examples - Java",
+    theme: {
+      collapsed: true,
+    },
+  },
   _____: {
     type: "separator",
     title: "More",
